@@ -1,0 +1,10 @@
+version: '2'
+networks:
+  exmpirenet:
+    driver: bridge
+services:
+  storefront:
+    ports:
+    - "${STOREFRONT_PORT}:${STOREFRONT_PORT}"
+    environment:
+    - COMMAND=yarn start

@@ -1,0 +1,13 @@
+version: '2'
+services:
+  storefront:
+    image: ${CONTAINER_IMAGE}
+    network_mode: "host"
+    environment:
+    - PROJECT=${PROJECT}
+    - SERVICE=${CONTAINER}
+    - COMMAND=yarn install
+    volumes:
+    - ${BASE_DIR}/emmpire_storefront:/usr/local/lib/emmpire_storefront
+    - ${BASE_DIR}/emmpire_storefront/compose/bootstrap.sh:/usr/local/bin/bootstrap.sh
+    command: bootstrap.sh
