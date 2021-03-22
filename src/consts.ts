@@ -1,0 +1,1 @@
+export const appLoaderHeight = 4;

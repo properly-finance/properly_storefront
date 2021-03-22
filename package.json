@@ -8,6 +8,12 @@
     "@babel/node": "^7.12.10",
     "@babel/plugin-proposal-decorators": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/styles": "^4.11.3",
+    "@metamask/onboarding": "^1.0.0",
+    "@reduxjs/toolkit": "^1.5.0",
+    "@types/classnames": "^2.2.11",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.2",
     "@types/react-redux": "^7.1.16",
@@ -15,9 +21,11 @@
     "axios": "^0.21.0",
     "bootstrap": "^4",
     "browserslist": "^4",
+    "classnames": "^2.2.6",
     "css-loader": "^4",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
+    "ethers": "^5.0.32",
     "express": "^4.17.1",
     "file-loader": "^6.2.0",
     "framer-motion": "^3.1.1",
@@ -29,12 +37,15 @@
     "postcss-loader": "3.*",
     "postcss-normalize": "^9.0.0",
     "postcss-preset-env": "^6.7.0",
-    "react": "^17.0.1",
+    "react": "^16.*",
     "react-awesome-reveal": "^3.7.1",
     "react-bootstrap": "^1.5.2",
-    "react-dom": "^17.0.1",
+    "react-dom": "^16.*",
+    "react-helmet": "^6.1.0",
     "react-hook-form": "^6.15.4",
+    "react-inlinesvg": "^2.2.2",
     "react-redux": "^7.2.2",
+    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",
@@ -45,6 +56,7 @@
     "ts-loader": "^8.0.18",
     "typescript": "^4.2.3",
     "url-loader": "^4.1.1",
+    "use-react-router": "^1.0.7",
     "webpack": "4.*"
   },
   "devDependencies": {
@@ -58,6 +70,6 @@
     "server:inspect": "babel-node --inspect-brk=0.0.0.0:9229 tools/run server",
     "build": "babel-node tools/run build",
     "build:inspect": "babel-node --inspect-brk=0.0.0.0:9229 tools/run build",
-    "build:release": "babel-node tools/run build --release"
+    "build:release": "NODE_ENV=production babel-node tools/run build --release"
   }
 }

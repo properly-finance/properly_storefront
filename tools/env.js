@@ -6,7 +6,7 @@ require('dotenv-expand')(
   })
 )
 
-const REACT_APP = /^REACT_APP_/i;
+const REACT_APP = /^APP_/i;
 
 function getClientEnvironment() {
 

@@ -1,20 +1,18 @@
 version: '2'
 networks:
-  exmpirenet:
+  emmpairnet:
     driver: bridge
 services:
   storefront:
     image: ${CONTAINER_IMAGE}
     networks:
-    - exmpirenet
+    - emmpairnet
     expose:
     - "${STOREFRONT_PORT}"    
-    external_links:
-    - exmpire_ajax_1:ajax
     environment:
     - PROJECT=${PROJECT}
     - SERVICE=${CONTAINER}
     volumes:
-    - ${BASE_DIR}/emmpire_storefront:/usr/local/lib/emmpire_storefront
-    - ${BASE_DIR}/emmpire_storefront/compose/runapp.sh:/usr/local/bin/runapp.sh
-    working_dir: /usr/local/lib/emmpire_storefront
+    - ${BASE_DIR}/emmpair_storefront:/usr/local/lib/emmpair_storefront
+    - ${BASE_DIR}/emmpair_storefront/compose/runapp.sh:/usr/local/bin/runapp.sh
+    working_dir: /usr/local/lib/emmpair_storefront

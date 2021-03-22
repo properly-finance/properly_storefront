@@ -89,7 +89,13 @@ config['output'] = {
 config['resolve'] = {
     modules: ['node_modules', 'src'],
     extensions: ['.ts', '.tsx', '.json', '.js'],
+    alias: {
+      '@assets': resolvePath(ROOT_DIR, 'assets'),
+      '@locale': resolvePath(ROOT_DIR, 'locale'),
+      '@emmpair': SRC_DIR,
+    }
 }
+
 
 // MODULE
 //

@@ -1,0 +1,4 @@
+export enum PermissionEnum {
+  READ_PERMISSION = "READ_PERMISSION",
+  WRITE_PERMISSION = "WRITE_PERMISSION",
+}
