@@ -5,13 +5,12 @@ import NotFound from "@emmpair/comps/NotFound";
 import { PermissionEnum } from "@emmpair/enums";
 // import { hasPermission } from "@emmpair/utils";
 
-interface ISectionRouteProps extends RouteProps {
+interface ISectionRoute extends RouteProps {
   permissions?: PermissionEnum[];
 }
 
-export const SectionRoute: React.FC<ISectionRouteProps> = ({
-  permissions,
-  ...props
+export const SectionRoute: React.FC<ISectionRoute> = ({
+  permissions, ...props
 }) => {
   // const { user } = useUser();
   // const hasPermissions = !permissions 

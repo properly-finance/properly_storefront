@@ -1,2 +1,2 @@
-emmpair storefront service
+properly storefront service
 ============================

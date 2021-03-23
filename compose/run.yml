@@ -1,18 +1,18 @@
 version: '2'
 networks:
-  emmpairnet:
+  properlynet:
     driver: bridge
 services:
   storefront:
     image: ${CONTAINER_IMAGE}
     networks:
-    - emmpairnet
+    - properlynet
     expose:
     - "${STOREFRONT_PORT}"    
     environment:
     - PROJECT=${PROJECT}
     - SERVICE=${CONTAINER}
     volumes:
-    - ${BASE_DIR}/emmpair_storefront:/usr/local/lib/emmpair_storefront
-    - ${BASE_DIR}/emmpair_storefront/compose/runapp.sh:/usr/local/bin/runapp.sh
-    working_dir: /usr/local/lib/emmpair_storefront
+    - ${BASE_DIR}/properly_storefront:/usr/local/lib/properly_storefront
+    - ${BASE_DIR}/properly_storefront/compose/runapp.sh:/usr/local/bin/runapp.sh
+    working_dir: /usr/local/lib/properly_storefront

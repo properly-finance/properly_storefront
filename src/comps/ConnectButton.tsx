@@ -9,18 +9,11 @@ import { pollWallet,
 
 const useStyles = makeStyles(
   theme => ({
-    arrow: {
-      [theme.breakpoints.down("sm")]: {
-        marginLeft: 0
-      },
-      marginLeft: theme.spacing(2),
-      transition: theme.transitions.duration.standard + "ms"
-    },
-    arrowRotate: {
-      transform: "rotate(180deg)"
-    },    
     wrap: {
-      position: "relative",
+      paddingRight: theme.spacing(2),
+      paddingLeft: theme.spacing(2),
+      display: 'flex',
+      alignItems: "center",
     },
     chip: {
       [theme.breakpoints.down("sm")]: {
@@ -56,6 +49,7 @@ const ConnectButton: React.FC = () => {
     <div className={classes.wrap} >
       <Chip
         className={ classes.chip }
+        onClick={ handshakeHandle }        
         label={
           <div className={ classes.label }>
             <b>
@@ -69,7 +63,6 @@ const ConnectButton: React.FC = () => {
             </b>
           </div>
         }
-        onClick={ handshakeHandle }
         disabled={ mmIsOK
                     ? handshakeState == 'idle' 
                       ? account

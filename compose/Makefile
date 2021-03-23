@@ -31,7 +31,7 @@ endif
 .PHONY: build
 build:
 	@echo "---> build ${CONTAINER_IMAGE}"
-	@docker build -t ${CONTAINER_IMAGE} $(BASE_DIR)/emmpair_storefront
+	@docker build -t ${CONTAINER_IMAGE} $(BASE_DIR)/properly_storefront
 	@echo "		end"
 
 

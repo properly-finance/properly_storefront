@@ -8,6 +8,6 @@ services:
     - SERVICE=${CONTAINER}
     - COMMAND=yarn install
     volumes:
-    - ${BASE_DIR}/emmpair_storefront:/usr/local/lib/emmpair_storefront
-    - ${BASE_DIR}/emmpair_storefront/compose/bootstrap.sh:/usr/local/bin/bootstrap.sh
+    - ${BASE_DIR}/properly_storefront:/usr/local/lib/properly_storefront
+    - ${BASE_DIR}/properly_storefront/compose/bootstrap.sh:/usr/local/bin/bootstrap.sh
     command: bootstrap.sh

@@ -1,14 +1,14 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-interface IWindowTitleProps {
+interface IAppTitle {
   title: string;
 };
 
-const WindowTitle: React.FC<IWindowTitleProps> = ({ title }) => {
+const AppTitle: React.FC<IAppTitle> = ({ title }) => {
   return (
     <Helmet title={`${title}`} />
   );
 };
 
-export default WindowTitle;
+export default AppTitle;

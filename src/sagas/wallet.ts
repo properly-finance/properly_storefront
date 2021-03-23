@@ -1,9 +1,10 @@
-import { call, put } from 'redux-saga/effects'
-import { ethers } from "ethers"
+import { call, put } from 'redux-saga/effects';
+import { ethers } from "ethers";
 // import { IAction } from "@emmpair/interfaces"
-import { walletHandshakeErrorAction,
-         walletHandshakeRejectAction,
-         walletAccountAction } from "@emmpair/reducers/wallet"
+import { 
+  walletHandshakeErrorAction,
+  walletHandshakeRejectAction,
+  walletAccountAction } from "@emmpair/reducers/wallet";
 
 // function callStub(text){
 //   return  new Promise<string>(resolve => {
@@ -42,13 +43,13 @@ export function* handshakeWallet() {
       balance: balance.toString(),
     }));
   } catch (error) {
-    console.log(error.message)    
+    console.log(error.message);
     if (error.code == 4001){
       yield put(walletHandshakeRejectAction());
     } else {
       yield put(walletHandshakeErrorAction());
-    }
-  }  
-}
+    };
+  };
+};
 
 
