@@ -45,11 +45,12 @@ const useStyles = makeStyles(theme => ({
     // border: "2px solid black",
   },
   infoPane: {
-    width: "50%",
+    // width: "50%",
     // border: "2px solid red",
   },
   actionPane:{
     flexGrow: 1,
+    marginLeft: theme.spacing(3),    
     // border: "2px solid green",
   },
 }), { name: "AppLayout" });

@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
+      minWidth: 400,      
       maxWidth: 400,
       backgroundColor: theme.palette.background.paper,
       gridRowGap: 0,
@@ -30,17 +31,20 @@ export default function InfoPane() {
           dense={true}>
       <ListItem>
         <ListItemText primary="Address"
-                      secondary={ account || 'undefined'}/>
+                      secondary={ account || '...'}/>
       </ListItem>
       <Divider component="li" />      
       <ListItem>
         <ListItemText primary="Network name"
-                      secondary={ network?.name || 'undefined'}/>
+                      secondary={ network?.name || '...'}/>
       </ListItem>
       <Divider component="li" />      
       <ListItem>
         <ListItemText primary="Balance"
-                      secondary={ balance && ethers.utils.formatEther(balance) || 'undefined' }/>
+                      secondary={ 
+                        balance && `${ethers.utils.formatEther(balance)} Eth`
+                        || '...' 
+                      }/>
       </ListItem>      
     </List>
   );

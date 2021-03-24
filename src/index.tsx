@@ -10,12 +10,12 @@ import ThemeProvider from "./comps/ThemeProvider"
 import NotFound from "./comps/NotFound"
 import AppLayout from "./comps/AppLayout"
 import SectionRoute from "./comps/SectionRoute"
-import DepositCollateralPage from "./pages/DepositCollateralPage"
+import CollateralSection from "./sections/CollateralSection"
 
 
-const WithdrawCollateralPage: React.FC = () => {
+const WithdrawCollateralSection: React.FC = () => {
   return (
-    <div>WithdrawCollateralPage</div>
+    <div>WithdrawCollateralSection</div>
   )
 }
 
@@ -27,8 +27,10 @@ function App():JSX.Element {
           <AppTitle title={'Dashboard | Properly'} />
           <AppLayout>        
             <Switch>
-              <SectionRoute exact path="/" component={DepositCollateralPage} />
-              <SectionRoute exact path="/withdraw-collateral" component={WithdrawCollateralPage} />
+              <SectionRoute exact path="/"
+                            component={CollateralSection} />
+              <SectionRoute exact path="/withdraw-collateral"
+                            component={WithdrawCollateralSection} />
               <Route component={NotFound} />        
             </Switch>
           </AppLayout>

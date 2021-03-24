@@ -24,7 +24,7 @@ export const HeaderToolBar: React.FC = () => {
   function handleChange (e: React.ChangeEvent<THTMLInputElement>, v: number) {
     e.preventDefault();
     setValue(v);
-    navigate(v == 0 ? "/" : e.currentTarget.href.replace(/http[s]?:[\/:]+[a-z]+:\d+/i, ''));
+    navigate(v == 0 ? "/" : e.currentTarget.href.replace(/http[s]?:[\/:]+[a-zA-Z-\.]+:?\d*/i, ''));
   };
 
   return (
@@ -36,10 +36,9 @@ export const HeaderToolBar: React.FC = () => {
           textColor="primary"
           centered
         >
-          <Tab label="Deposit Collateral" href="" />
-          <Tab label="Withdraw Collateral" href="withdraw-collateral" />
-          <Tab label="Mint Token" href="mint-token" />
-          <Tab label="Burn Token" href="burn-token" />          
+          <Tab label="Collateral" href="" />
+          <Tab label="Token" href="token" />
+          <Tab label="Farm" href="farm" />          
       </Tabs>
     </div>   
   )
