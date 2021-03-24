@@ -11,8 +11,7 @@ if (window.ethereum) {
 }
 
 export function pollWallet(): IAppState['wallet'] {
-  const wallet = useSelector((state: IAppState) => state.wallet)
-  return wallet
+  return useSelector((state: IAppState) => state.wallet)
 }
 
 export function checkMetaMaskWallet(): [boolean, string] {

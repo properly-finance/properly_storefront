@@ -10,44 +10,31 @@ import ThemeProvider from "./comps/ThemeProvider"
 import NotFound from "./comps/NotFound"
 import AppLayout from "./comps/AppLayout"
 import SectionRoute from "./comps/SectionRoute"
-// import HomePage from "./pages/HomePage"
+import DepositCollateralPage from "./pages/DepositCollateralPage"
 
 
-// const App: React.FC = () => {
-//   return (
-//   <ReduxProvider store={store}>
-//     <BrowserRouter basename={APP_MOUNT_URI}>
-//       <AppTitle title={'Dashboard | Properly'} />
-//       <Switch>
-//         <SectionRoute exact path="/" component={HomePage} />
-//         <Route component={NotFound} />
-//       </Switch>
-//     </BrowserRouter>
-//   </ReduxProvider>
-//   );
-// };
-const HomePage: React.FC = () => {
+const WithdrawCollateralPage: React.FC = () => {
   return (
-    <div>HomePage</div>
+    <div>WithdrawCollateralPage</div>
   )
 }
 
-const App: React.FC = () => {
+function App():JSX.Element {
   return (
-  <ReduxProvider store={store}>
-    <BrowserRouter>
-      <ThemeProvider>
-        <AppTitle title={'Dashboard | Properly'} />
-        <AppLayout>        
-          <Switch>
-            <SectionRoute exact path="/" component={HomePage} />
-            <Route component={NotFound} />        
-          </Switch>
-        </AppLayout>
-      </ThemeProvider>
-    </BrowserRouter>
-  </ReduxProvider>
-  );
-};
+    <ReduxProvider store={store}>
+      <BrowserRouter>
+        <ThemeProvider>
+          <AppTitle title={'Dashboard | Properly'} />
+          <AppLayout>        
+            <Switch>
+              <SectionRoute exact path="/" component={DepositCollateralPage} />
+              <SectionRoute exact path="/withdraw-collateral" component={WithdrawCollateralPage} />
+              <Route component={NotFound} />        
+            </Switch>
+          </AppLayout>
+        </ThemeProvider>
+      </BrowserRouter>
+    </ReduxProvider>
+)};
 
 render(<App />, document.querySelector("#content"));

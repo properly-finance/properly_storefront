@@ -6,7 +6,7 @@ export type TUseNavigator = (
   preserveQs?: boolean
 ) => void;
 
-function useNavigator(): TUseNavigator {
+function useNavigator():TUseNavigator {
   const { location:{ search }, history } = useRouter();
   return (
     url: string,

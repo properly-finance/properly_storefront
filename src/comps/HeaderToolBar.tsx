@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-// import useNavigator from "@emmpair/hooks/useNavigator";
+import useNavigator from "@emmpair/hooks/useNavigator";
 
 const useStyles = makeStyles({
   root: {
@@ -11,22 +11,20 @@ const useStyles = makeStyles({
 },{ name: "HeaderToolBar" });
 
 
-type THTMLInputElement = HTMLInputElement & {href: string}
+type THTMLInputElement = HTMLInputElement & {
+  href: string
+}
 
 
 export const HeaderToolBar: React.FC = () => {
-  // const navigate = useNavigator();
-
+  const navigate = useNavigator();
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (
-    e: React.ChangeEvent<THTMLInputElement>,
-    newValue: number
-  ) => {
+  function handleChange (e: React.ChangeEvent<THTMLInputElement>, v: number) {
     e.preventDefault();
-    setValue(newValue);
-    console.log(e.currentTarget.href)
+    setValue(v);
+    navigate(v == 0 ? "/" : e.currentTarget.href.replace(/http[s]?:[\/:]+[a-z]+:\d+/i, ''));
   };
 
   return (
@@ -38,13 +36,18 @@ export const HeaderToolBar: React.FC = () => {
           textColor="primary"
           centered
         >
-          <Tab label="Item One" href="/one" />
-          <Tab label="Item Two" href="/two" />
-          <Tab label="Item Three" href="/three" />
+          <Tab label="Deposit Collateral" href="" />
+          <Tab label="Withdraw Collateral" href="withdraw-collateral" />
+          <Tab label="Mint Token" href="mint-token" />
+          <Tab label="Burn Token" href="burn-token" />          
       </Tabs>
     </div>   
   )
 };
 
 export default HeaderToolBar;
+
+
+
+
 
