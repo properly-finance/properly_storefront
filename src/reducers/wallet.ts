@@ -5,10 +5,10 @@ import { createSlice } from '@reduxjs/toolkit'
 export const walletSlice = createSlice({
   name: 'wallet',
   initialState: {
+    handshake: 'idle',
     account: undefined,
     network: undefined,
     balance: undefined,    
-    handshake: 'idle',
   },
   reducers: {
     walletHandshakeAction(state) {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ethers } from "ethers";
 import { makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import NumberFormat from 'react-number-format';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -12,7 +13,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import { deepOrange } from '@material-ui/core/colors';
 import classNames from "classnames";
-import { pollContract } from "@emmpair/hooks/useContract";
+import { pollContract, useCollateralizeEth } from "@emmpair/hooks/useContract";
+import { pollWallet } from "@emmpair/hooks/useWallet";
 
 
 interface State {
@@ -100,9 +102,12 @@ export default function CollateralSection():JSX.Element {
   const [values, setValues] = useState<State>({
     amount: "",
   });
-  const { collateralBalance,
+  const { txStatus,
+          collateralBalance,
           collateralUsed,
           borrowLimit } = pollContract();
+  const { account } = pollWallet();          
+  const collateralizeEth = useCollateralizeEth();
 
   // @method!!!
   function handleChange (prop: keyof State){
@@ -114,7 +119,7 @@ export default function CollateralSection():JSX.Element {
   // @method!!!  
   function handleDeposit(event: React.MouseEvent<HTMLButtonElement>){
     event.preventDefault()
-    console.log(values)
+    collateralizeEth({...values, account })
   }
 
   // @method!!!  
@@ -157,8 +162,9 @@ export default function CollateralSection():JSX.Element {
             onClick={handleDeposit}
             type="submit"
             data-test="submit"
+            disabled={ txStatus == 'pending' || !account }
           >
-            Deposit
+            Deposit { txStatus != 'idle' &&  ` ${txStatus}...` }
           </Button>
         </ListItem>
         <ListItem>
@@ -169,6 +175,7 @@ export default function CollateralSection():JSX.Element {
             onClick={handleWithdraw}
             type="submit"
             data-test="submit"
+            disabled={ txStatus == 'pending' || !account }
           >
             Withdraw
           </ColorButton>
@@ -178,18 +185,24 @@ export default function CollateralSection():JSX.Element {
       <List className={classes.infoPane} disablePadding dense >
         <ListItem>
           <ListItemText primary="Collateral Balance"
-                        secondary={ collateralBalance || '...'}/>
+                        secondary={ collateralBalance 
+                          && `${ethers.utils.formatEther(collateralBalance)} Eth` 
+                          || '...'}/>
         </ListItem>
         <Divider component="li" />      
         <ListItem>
           <ListItemText primary="Collateral Used"
-                        secondary={ collateralUsed || '...'}/>
+                        secondary={ collateralUsed
+                           && `${ethers.utils.formatEther(collateralUsed)} Eth`
+                           || '...'}/>
         </ListItem>
         <Divider component="li" />      
         <ListItem>
           <ListItemText primary="Borrow Limit"
-                        secondary={ borrowLimit || '...' }/>
-        </ListItem>      
+                        secondary={ borrowLimit 
+                          && `${ethers.utils.formatEther(borrowLimit)} Eth`
+                          || '...' }/>
+        </ListItem>
       </List>
 
     </div>

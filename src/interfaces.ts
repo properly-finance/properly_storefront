@@ -14,6 +14,7 @@ export interface IAppState {
     balance?: string    
   }
   contract: {
+    txStatus: string
     collateralBalance?: string
     collateralUsed?: string
     borrowLimit?: string

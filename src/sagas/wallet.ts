@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import { ethers } from "ethers";
-import cnm_abi from "@abis/cnm.json";
+import cnmAbi from "@abis/cnm.json";
 import { APP_CNM_CONTRACT_ADDRESS } from "@emmpair/config";
 import { fetchNetwork, fetchBalance } from "@emmpair/meths/wallet";
 import { fetchCollateralBalance,
@@ -10,7 +10,7 @@ import { fetchCollateralBalance,
 import { walletHandshakeErrorAction,
          walletHandshakeRejectAction,
          walletAccountAction } from "@emmpair/reducers/wallet";
-import { contractCollateralAction } from "@emmpair/reducers/contract";
+import { collateralAction } from "@emmpair/reducers/contract";
 
 
 export function* handshakeWallet() {
@@ -18,22 +18,22 @@ export function* handshakeWallet() {
     const method = { method: 'eth_requestAccounts' };
     const accounts = yield call(window.ethereum.request, method);
     const account = accounts[0];
-    window.web3 = new ethers.providers.Web3Provider(window.ethereum);
+    window.ethers = new ethers.providers.Web3Provider(window.ethereum);
     // ..
-    const network = yield call(fetchNetwork, window.web3);
-    const balance = yield call(fetchBalance, window.web3, account);
+    const network = yield call(fetchNetwork, window.ethers);
+    const balance = yield call(fetchBalance, window.ethers, account);
     // ..
-    const cnm_contract = new ethers.Contract(APP_CNM_CONTRACT_ADDRESS,
-                                             cnm_abi,
-                                             window.web3);
+    window.cnmContract = new ethers.Contract(APP_CNM_CONTRACT_ADDRESS,
+                                             cnmAbi,
+                                             window.ethers);
     const collateralBalance = yield call(fetchCollateralBalance,
-                                         cnm_contract,
+                                         window.cnmContract,
                                          account);
     const collateralUsed = yield call(fetchCollateralUsed,
-                                      cnm_contract,
+                                      window.cnmContract,
                                       account);
     const borrowLimit = yield call(fetchBorrowLimit,
-                                   cnm_contract,
+                                   window.cnmContract,
                                    account);
 
     yield put(walletAccountAction({
@@ -46,7 +46,7 @@ export function* handshakeWallet() {
       balance: balance.toString(),
     }));
 
-    yield put(contractCollateralAction({
+    yield put(collateralAction({
       collateralBalance: collateralBalance.toString(),
       collateralUsed: collateralUsed.toString(),
       borrowLimit: borrowLimit.toString(),
