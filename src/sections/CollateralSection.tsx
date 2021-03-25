@@ -8,8 +8,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from "@material-ui/core/Button";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
 import { deepOrange } from '@material-ui/core/colors';
 import classNames from "classnames";
+import { pollContract } from "@emmpair/hooks/useContract";
+
 
 interface State {
   amount: string;
@@ -21,10 +25,28 @@ interface INumberFormatEth {
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    backgroundColor: null,
+  sectionWrap: {
+    display: "flex",
+    alignItems: "flex-start",
+  },
+  formPane: {
+    flex: 1,
     width: 400,
     padding: '0 !important',
+    minWidth: 400,    
+  },
+  infoPane :{
+    backgroundColor: theme.palette.background.paper,
+    minWidth: 400,
+    maxWidth: 400,
+    marginLeft: theme.spacing(3),
+    "& li": {
+      "& div": {
+        "& div": {
+          fontWeight: 600,
+        },
+      },
+    },
   },
   firstItem: {
     paddingTop: "0 !important",    
@@ -78,6 +100,9 @@ export default function CollateralSection():JSX.Element {
   const [values, setValues] = useState<State>({
     amount: "",
   });
+  const { collateralBalance,
+          collateralUsed,
+          borrowLimit } = pollContract();
 
   // @method!!!
   function handleChange (prop: keyof State){
@@ -99,54 +124,74 @@ export default function CollateralSection():JSX.Element {
   }
 
   return (
-    <List className={classes.root} disablePadding>
-      <ListItem className={classes.firstItem}>          
-        <FormControl 
-          className={classNames({}, classes.textField)} 
-          variant="outlined"
-        >
-          <InputLabel htmlFor="outlined-adornment-amount">
-            Amount
-          </InputLabel>
-          <OutlinedInput
-            type="numberformat"
-            value={values.amount}
-            onChange={handleChange('amount')}
-            endAdornment={
-              <InputAdornment position="end">
-                Eth
-              </InputAdornment>
-            }
-            labelWidth={70}
-            inputComponent={ NumberFormatEth as any}
-            autoFocus
-          />
-        </FormControl>
-      </ListItem>
-      <ListItem>
-        <Button
-          className={classes.button}
-          color="primary"
-          variant="contained"
-          onClick={handleDeposit}
-          type="submit"
-          data-test="submit"
-        >
-          Deposit
-        </Button>
-      </ListItem>
-      <ListItem>
-        <ColorButton
-          className={classes.button}
-          color="primary"          
-          variant="contained"
-          onClick={handleWithdraw}
-          type="submit"
-          data-test="submit"
-        >
-          Withdraw
-        </ColorButton>
-      </ListItem>
-    </List>
+    <div className={classes.sectionWrap}>
+      <List className={classes.formPane} disablePadding>
+        <ListItem className={classes.firstItem}>          
+          <FormControl 
+            className={classNames({}, classes.textField)} 
+            variant="outlined"
+          >
+            <InputLabel htmlFor="outlined-adornment-amount">
+              Amount
+            </InputLabel>
+            <OutlinedInput
+              type="numberformat"
+              value={values.amount}
+              onChange={handleChange('amount')}
+              endAdornment={
+                <InputAdornment position="end">
+                  Eth
+                </InputAdornment>
+              }
+              labelWidth={70}
+              inputComponent={ NumberFormatEth as any}
+              autoFocus
+            />
+          </FormControl>
+        </ListItem>
+        <ListItem>
+          <Button
+            className={classes.button}
+            color="primary"
+            variant="contained"
+            onClick={handleDeposit}
+            type="submit"
+            data-test="submit"
+          >
+            Deposit
+          </Button>
+        </ListItem>
+        <ListItem>
+          <ColorButton
+            className={classes.button}
+            color="primary"          
+            variant="contained"
+            onClick={handleWithdraw}
+            type="submit"
+            data-test="submit"
+          >
+            Withdraw
+          </ColorButton>
+        </ListItem>
+      </List>
+
+      <List className={classes.infoPane} disablePadding dense >
+        <ListItem>
+          <ListItemText primary="Collateral Balance"
+                        secondary={ collateralBalance || '...'}/>
+        </ListItem>
+        <Divider component="li" />      
+        <ListItem>
+          <ListItemText primary="Collateral Used"
+                        secondary={ collateralUsed || '...'}/>
+        </ListItem>
+        <Divider component="li" />      
+        <ListItem>
+          <ListItemText primary="Borrow Limit"
+                        secondary={ borrowLimit || '...' }/>
+        </ListItem>      
+      </List>
+
+    </div>
   )
 }

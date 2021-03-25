@@ -12,23 +12,28 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      minWidth: 400,      
+      minWidth: 400,
       maxWidth: 400,
       backgroundColor: theme.palette.background.paper,
       gridRowGap: 0,
       // margin: theme.spacing(2),
+      "& li": {
+        "& div": {
+          "& div": {
+            fontWeight: 600,
+          },
+        },
+      },
     },
   }),
 );
 
 export default function InfoPane() {
   const classes = useStyles();
-  const { account, network, balance } = pollWallet()  
+  const { account, network, balance } = pollWallet();
 
   return (
-    <List className={classes.root}
-          disablePadding={true} 
-          dense={true}>
+    <List className={classes.root} disablePadding dense >
       <ListItem>
         <ListItemText primary="Address"
                       secondary={ account || '...'}/>

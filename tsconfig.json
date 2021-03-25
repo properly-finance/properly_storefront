@@ -13,6 +13,7 @@
     "paths": {
       "@assets/*": ["assets/*"],
       "@locale/*": ["locale/*"],
+      "@abis/*": ["abis/*"],
       "@emmpair/*": ["src/*"],
     },    
   },

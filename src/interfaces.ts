@@ -13,5 +13,10 @@ export interface IAppState {
     network?: any
     balance?: string    
   }
+  contract: {
+    collateralBalance?: string
+    collateralUsed?: string
+    borrowLimit?: string
+  }
 }
 

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+// import { IAction } from "@emmpair/interfaces"
 
 
 export const walletSlice = createSlice({
@@ -30,10 +31,7 @@ export const walletSlice = createSlice({
         state.handshake = 'error'
       }
     },
-    walletAccountAction(
-      state, 
-      { payload: { account, network, balance } }
-    ) {
+    walletAccountAction(state, {payload: { account, network, balance }}) {
       if (state.handshake === 'pending') {      
         if (account) {
           state.account = account

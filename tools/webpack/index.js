@@ -92,6 +92,7 @@ config['resolve'] = {
     alias: {
       '@assets': resolvePath(ROOT_DIR, 'assets'),
       '@locale': resolvePath(ROOT_DIR, 'locale'),
+      '@abis': resolvePath(ROOT_DIR, 'abis'),
       '@emmpair': SRC_DIR,
     }
 }
