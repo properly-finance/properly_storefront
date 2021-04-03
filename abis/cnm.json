@@ -2,13 +2,23 @@
   {
     "inputs": [
       {
-        "internalType": "contract SynteticWilliamsburg",
+        "internalType": "contract SyntheticToken",
         "name": "_token",
         "type": "address"
       },
       {
-        "internalType": "contract TestOilPriceOracle",
+        "internalType": "contract LandOracleProxy",
         "name": "_price",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_collateralrequirementpercent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_oracleaddress",
         "type": "address"
       }
     ],
@@ -93,31 +103,12 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "BorrowLimit",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "_amount",
         "type": "uint256"
       }
     ],
-    "name": "BurnAssetOil",
+    "name": "BurnAsset",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -149,7 +140,7 @@
         "type": "address"
       }
     ],
-    "name": "CollateralUsed",
+    "name": "CollateralUsedEth",
     "outputs": [
       {
         "internalType": "uint256",
@@ -171,11 +162,43 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_address",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "GetBorrowLimit",
+    "name": "CurrentBorrowLimitEth",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "LandIndexPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_called",
+        "type": "address"
+      }
+    ],
+    "name": "LandPrice",
     "outputs": [
       {
         "internalType": "uint256",
@@ -194,7 +217,7 @@
         "type": "uint256"
       }
     ],
-    "name": "MintAssetOil",
+    "name": "MintAsset",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -214,10 +237,36 @@
   },
   {
     "inputs": [],
-    "name": "oilpereth",
+    "name": "collateralRequirementPercent",
     "outputs": [
       {
-        "internalType": "contract TestOilPriceOracle",
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "landPerEthPriceIndex",
+    "outputs": [
+      {
+        "internalType": "contract LandOracleProxy",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oracleAddress",
+    "outputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -230,7 +279,7 @@
     "name": "token",
     "outputs": [
       {
-        "internalType": "contract SynteticWilliamsburg",
+        "internalType": "contract SyntheticToken",
         "name": "",
         "type": "address"
       }

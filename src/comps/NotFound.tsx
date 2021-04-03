@@ -1,5 +1,5 @@
 import React from "react";
-import NotFoundPage from "@emmpair/pages/NotFoundPage";
+import NotFoundPage from "./NotFoundPage";
 import useNavigator from "@emmpair/hooks/useNavigator";
 
 export const NotFound: React.FC = () => {

@@ -1,52 +1,61 @@
-import { createSlice } from '@reduxjs/toolkit'
-// import { IAction } from "@emmpair/interfaces"
+import { TAction } from "@emmpair/types"
+import { TWalletState } from "./types"
+import { createReducer } from '@reduxjs/toolkit'
+import  {
+  HANDSHAKE_WALLET_PENDING,
+  HANDSHAKE_WALLET_REJECT,
+  HANDSHAKE_WALLET_ERROR,
+  HANDSHAKE_WALLET_SUCCESS,
+  UPDATE_WALLET_REQUEST } from "@emmpair/actions/wallet"
+import { UpdateWalletRequestAction } from  "@emmpair/actions/wallet"
 
 
-export const walletSlice = createSlice({
-  name: 'wallet',
-  initialState: {
-    handshake: 'idle',
-    account: undefined,
-    network: undefined,
-    balance: undefined,    
-  },
-  reducers: {
-    walletHandshakeAction(state) {
-      if (['idle', 'reject', 'error'].includes(state.handshake) ) {
-        state.handshake = 'pending'
-      }
-    },
-    walletHandshakeSuccessAction(state) {
-      if (state.handshake === 'pending') {
-        state.handshake = 'idle'
-      }
-    },
-    walletHandshakeRejectAction(state) {
-      if (state.handshake === 'pending') {
-        state.handshake = 'reject'
-      }
-    },
-    walletHandshakeErrorAction(state) {
-      if (state.handshake === 'pending') {
-        state.handshake = 'error'
-      }
-    },
-    walletAccountAction(state, {payload: { account, network, balance }}) {
-      if (state.handshake === 'pending') {      
-        if (account) {
-          state.account = account
-          state.network = network
-          state.balance = balance
-          state.handshake = 'idle'          
-      }}
+const initialState: TWalletState = {
+  hsStatus: 'idle',
+  account: undefined,
+  network: undefined,
+  balance: undefined,
+}
+
+const walletReducer = createReducer(initialState, (builder) => {
+  builder
+  .addCase(HANDSHAKE_WALLET_PENDING, (state: TWalletState) => {
+    const { hsStatus } = state
+    if (['idle', 'reject', 'error'].includes(hsStatus) ) {
+      state.hsStatus = 'pending'
     }
-  }
+  })
+  .addCase(HANDSHAKE_WALLET_REJECT, (state: TWalletState) => {
+    const { hsStatus } = state
+    if (hsStatus === 'pending') {
+      state.hsStatus = 'reject'
+    }
+  })
+  .addCase(HANDSHAKE_WALLET_ERROR, (state: TWalletState) => {
+    const { hsStatus } = state
+    if (hsStatus === 'pending') {
+      state.hsStatus = 'error'
+    }
+  })
+  .addCase(HANDSHAKE_WALLET_SUCCESS, (state: TWalletState, action: TAction) => {
+    const { hsStatus } = state
+    const { account, network, balance } = action.payload
+    if (hsStatus === 'pending') {
+      if (account) {
+        state.account = account
+        state.network = network
+        state.balance = balance
+        state.hsStatus = 'idle'
+    }}
+  })
+  .addCase(UPDATE_WALLET_REQUEST, (
+    state: TWalletState,
+    action: UpdateWalletRequestAction
+  ) => {
+    const { balance } = action.payload
+    state.balance = balance
+  })  
 })
 
-const { actions, reducer } = walletSlice
-export const { walletHandshakeAction } = actions
-export const { walletHandshakeSuccessAction } = actions
-export const { walletHandshakeRejectAction } = actions
-export const { walletHandshakeErrorAction } = actions
-export const { walletAccountAction } = actions
-export default reducer
+
+export default walletReducer

@@ -8,7 +8,7 @@ const useStyles = makeStyles({
   root: {
     flexGrow: 1,
   },
-},{ name: "HeaderToolBar" });
+},{ name: "ToolBar" });
 
 
 type THTMLInputElement = HTMLInputElement & {
@@ -16,7 +16,7 @@ type THTMLInputElement = HTMLInputElement & {
 }
 
 
-export const HeaderToolBar: React.FC = () => {
+export const ToolBar: React.FC = () => {
   const navigate = useNavigator();
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -36,15 +36,14 @@ export const HeaderToolBar: React.FC = () => {
           textColor="primary"
           centered
         >
-          <Tab label="Collateral" href="" />
-          <Tab label="Token" href="token" />
+          <Tab label="Collateral & Mint" href="" />
           <Tab label="Farm" href="farm" />          
       </Tabs>
     </div>   
   )
 };
 
-export default HeaderToolBar;
+export default ToolBar;
 
 
 

@@ -55,6 +55,7 @@
     "sass-loader": "^10.*",
     "svg-url-loader": "^7.1.1",
     "ts-loader": "^8.0.18",
+    "typesafe-actions": "^5.1.0",
     "typescript": "^4.2.3",
     "url-loader": "^4.1.1",
     "use-react-router": "^1.0.7",

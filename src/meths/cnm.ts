@@ -11,15 +11,21 @@ export function fetchCollateralBalance(contract, account){
 };
 
 export function fetchCollateralUsed(contract, account){
-  return contract.CollateralUsed(account)
+  return contract.CollateralUsedEth(account)
 };
 
 export function fetchBorrowLimit(contract, account){
-  return contract.BorrowLimit(account)
+  return contract.CurrentBorrowLimitEth(account)
 };
 
-export async  function doCollateralizeEth (contract, amount) {
+export async function txCollateralizeEth(contract, amount) {
   const tx = await contract.CollateralizeEth({value: amount})
+  const txInfo = await tx.wait()
+  return [tx, txInfo]
+}
+
+export async function txWithdrawCollateral(contract, amount) {
+  const tx = await contract.WithdrawCollateral(amount)
   const txInfo = await tx.wait()
   return [tx, txInfo]
 }

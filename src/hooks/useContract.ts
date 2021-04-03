@@ -1,16 +1,27 @@
 import { useCallback } from 'react';
 import { useSelector, useDispatch  } from 'react-redux';
-import { IAppState } from "@emmpair/interfaces";
+import { TAppState, TCnmState } from "@emmpair/reducers/types";
 import { TAppDispatch } from "@emmpair/types";
-import { collateralizeEthAction } from "@emmpair/reducers/contract";
+import { collateralPending, withdrawPending } from "@emmpair/actions/cnm";
 
 
-export function pollContract(): IAppState['contract'] {
-  return useSelector((state: IAppState) => state.contract)
+export function pollCnm(): TCnmState {
+  return useSelector((state: TAppState) => state.cnm)
+};
+
+export function useCollateralizeEth(
+): (account: string, amount: string) => void {
+  const dispatch = useDispatch<TAppDispatch>()
+  return useCallback((
+    account: string, amount: string
+  ) => dispatch(collateralPending(account, amount)), [dispatch])
 };
 
 
-export function useCollateralizeEth(): ({}) => void {
+export function useWithdrawCollateral(
+): (account: string, amount: string) => void {
   const dispatch = useDispatch<TAppDispatch>()
-  return useCallback((values) => dispatch(collateralizeEthAction(values)), [dispatch])
+  return useCallback((
+    account: string, amount: string
+  ) => dispatch(withdrawPending(account, amount)), [dispatch])
 };

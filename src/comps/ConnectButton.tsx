@@ -42,7 +42,7 @@ const useStyles = makeStyles(
 const ConnectButton: React.FC = () => {
   const classes = useStyles({});
   const handshakeHandle = useHandshakeWallet();
-  const { handshake: handshakeStatus, account } = pollWallet();
+  const { hsStatus, account } = pollWallet();
   const [mmIsOK, mmLabelText] = checkMetaMaskWallet();
   
   return (
@@ -54,17 +54,17 @@ const ConnectButton: React.FC = () => {
           <div className={ classes.label }>
             <b>
               { mmIsOK
-                ? handshakeStatus == 'idle' 
+                ? hsStatus == 'idle' 
                   ? account
                     ? 'Connected'
                     : 'Connect'
-                  : `${handshakeStatus}...`
+                  : `${hsStatus}...`
                 : mmLabelText}
             </b>
           </div>
         }
         disabled={ mmIsOK
-                    ? handshakeStatus == 'idle' 
+                    ? hsStatus == 'idle' 
                       ? account
                         ? true
                         : false

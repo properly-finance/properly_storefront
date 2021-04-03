@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
 import walletReducer from './wallet'
-import contractSlice from "./contract"
+import cnmReducer from "./cnm"
 
 
 const rootReducer = combineReducers({
   wallet: walletReducer,
-  contract: contractSlice,
+  cnm: cnmReducer,
 })
 
 export default rootReducer

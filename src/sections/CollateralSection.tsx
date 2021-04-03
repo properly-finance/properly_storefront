@@ -13,12 +13,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import { deepOrange } from '@material-ui/core/colors';
 import classNames from "classnames";
-import { pollContract, useCollateralizeEth } from "@emmpair/hooks/useContract";
+import { pollCnm, useCollateralizeEth, useWithdrawCollateral } from "@emmpair/hooks/useContract";
 import { pollWallet } from "@emmpair/hooks/useWallet";
 
 
-interface State {
-  amount: string;
+type State = {
+  depositAmount: string;
+  withdrawAmount: string;  
 }
 
 interface INumberFormatEth {
@@ -100,14 +101,14 @@ function NumberFormatEth(props: INumberFormatEth) {
 export default function CollateralSection():JSX.Element {
   const classes = useStyles();    
   const [values, setValues] = useState<State>({
-    amount: "",
+    depositAmount: "",
+    withdrawAmount: "",
   });
-  const { txStatus,
-          collateralBalance,
-          collateralUsed,
-          borrowLimit } = pollContract();
+  const { txCollateralStatus, txWithdrawStatus,
+          collateralBalance, collateralUsed, borrowLimit } = pollCnm();
   const { account } = pollWallet();          
   const collateralizeEth = useCollateralizeEth();
+  const withdrawCollateral = useWithdrawCollateral();  
 
   // @method!!!
   function handleChange (prop: keyof State){
@@ -119,13 +120,13 @@ export default function CollateralSection():JSX.Element {
   // @method!!!  
   function handleDeposit(event: React.MouseEvent<HTMLButtonElement>){
     event.preventDefault()
-    collateralizeEth({...values, account })
+    collateralizeEth(account, values.depositAmount)
   }
 
   // @method!!!  
   function handleWithdraw(event: React.MouseEvent<HTMLButtonElement>){
     event.preventDefault()
-    console.log(values)
+    withdrawCollateral(account, values.withdrawAmount)
   }
 
   return (
@@ -137,12 +138,12 @@ export default function CollateralSection():JSX.Element {
             variant="outlined"
           >
             <InputLabel htmlFor="outlined-adornment-amount">
-              Amount
+              Deposit Amount
             </InputLabel>
             <OutlinedInput
               type="numberformat"
-              value={values.amount}
-              onChange={handleChange('amount')}
+              value={values.depositAmount}
+              onChange={handleChange('depositAmount')}
               endAdornment={
                 <InputAdornment position="end">
                   Eth
@@ -162,10 +163,34 @@ export default function CollateralSection():JSX.Element {
             onClick={handleDeposit}
             type="submit"
             data-test="submit"
-            disabled={ txStatus == 'pending' || !account }
+            disabled={ txCollateralStatus == 'pending'
+              || txWithdrawStatus == 'pending'
+              || !account }
           >
-            Deposit { txStatus != 'idle' &&  ` ${txStatus}...` }
+            Deposit { txCollateralStatus != 'idle' &&  `${txCollateralStatus}...` }
           </Button>
+        </ListItem>
+        <ListItem>        
+          <FormControl 
+            className={classNames({}, classes.textField)} 
+            variant="outlined"
+          >
+            <InputLabel htmlFor="outlined-adornment-amount">
+              Withdraw Amount
+            </InputLabel>
+            <OutlinedInput
+              type="numberformat"
+              value={values.withdrawAmount}
+              onChange={handleChange('withdrawAmount')}
+              endAdornment={
+                <InputAdornment position="end">
+                  Eth
+                </InputAdornment>
+              }
+              labelWidth={70}
+              inputComponent={ NumberFormatEth as any}
+            />
+          </FormControl>
         </ListItem>
         <ListItem>
           <ColorButton
@@ -175,9 +200,11 @@ export default function CollateralSection():JSX.Element {
             onClick={handleWithdraw}
             type="submit"
             data-test="submit"
-            disabled={ txStatus == 'pending' || !account }
+            disabled={ txCollateralStatus == 'pending' 
+              || txWithdrawStatus == 'pending'
+              || !account }
           >
-            Withdraw
+            Withdraw { txWithdrawStatus != 'idle' &&  `${txWithdrawStatus}...` }
           </ColorButton>
         </ListItem>
       </List>

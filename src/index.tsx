@@ -2,20 +2,20 @@ import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Provider as ReduxProvider } from 'react-redux';
-import AppTitle from "./comps/AppTitle"
+import TitleSection from "./sections/TitleSection"
 // ..
 // import { APP_MOUNT_URI } from "./config";
 import store from "./store";
 import ThemeProvider from "./comps/ThemeProvider"
 import NotFound from "./comps/NotFound"
-import AppLayout from "./comps/AppLayout"
+import LayoutSection from "./sections/LayoutSection"
 import SectionRoute from "./comps/SectionRoute"
 import CollateralSection from "./sections/CollateralSection"
 
 
-const WithdrawCollateralSection: React.FC = () => {
+const FarmSection: React.FC = () => {
   return (
-    <div>WithdrawCollateralSection</div>
+    <div>FarmSection</div>
   )
 }
 
@@ -24,16 +24,16 @@ function App():JSX.Element {
     <ReduxProvider store={store}>
       <BrowserRouter>
         <ThemeProvider>
-          <AppTitle title={'Dashboard | Properly'} />
-          <AppLayout>        
+          <TitleSection title={'Dashboard | Properly'} />
+          <LayoutSection>        
             <Switch>
               <SectionRoute exact path="/"
                             component={CollateralSection} />
-              <SectionRoute exact path="/withdraw-collateral"
-                            component={WithdrawCollateralSection} />
+              <SectionRoute exact path="/farm"
+                            component={FarmSection} />
               <Route component={NotFound} />        
             </Switch>
-          </AppLayout>
+          </LayoutSection>
         </ThemeProvider>
       </BrowserRouter>
     </ReduxProvider>

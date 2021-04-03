@@ -2,14 +2,12 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 // import { makeStyles, Theme } from "@material-ui/core/styles";
 // import useTheme from "@emmpair/hooks/useTheme";
-import ConnectButton from "./ConnectButton";
-import ThemeSwitch from "./ThemeSwitch";
-import HeaderToolBar from "./HeaderToolBar";
-import InfoPane from "./InfoPane";
+import ConnectButton from "@emmpair/comps/ConnectButton";
+import ThemeSwitch from "@emmpair/comps/ThemeSwitch";
+import ToolBar from "@emmpair/comps/ToolBar";
+import InfoPane from "@emmpair/comps/InfoPane";
 
-
-
-interface IAppLayout {
+interface ILayoutSection {
   children: React.ReactNode;
 }
 
@@ -53,19 +51,18 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(3),
     // border: "2px solid green",
   },
-}), { name: "AppLayout" });
+}), { name: "LayoutSection" });
 
 
-const AppLayout: React.FC<IAppLayout> = ({ children }) => {
+const LayoutSection: React.FC<ILayoutSection> = ({ children }) => {
   const classes = useStyles({});
-
   return (
     <div className={classes.content}>
       <div className={classes.header}>
         <div className={classes.logo}>
           <b>Pro<span>perl</span>y</b><span>Fin</span>anc<span>E</span>
         </div>
-        <HeaderToolBar />
+        <ToolBar />
         <ThemeSwitch />
         <ConnectButton />
       </div>
@@ -81,4 +78,4 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
   )    
 }
 
-export default AppLayout
+export default LayoutSection
