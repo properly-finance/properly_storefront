@@ -1,20 +1,16 @@
 // import { TAction } from "@emmpair/types"
-import { TCnmState } from "./types"
+import { TDepositState } from "./types"
 import { createReducer } from '@reduxjs/toolkit'
-import { CollateralSuccessAction,
-         WithdrawSuccessAction } from "@emmpair/actions/cnm"
-import  {
-  COLLATERAL_PENDING,
-  COLLATERAL_REJECT,
-  COLLATERAL_ERROR,
-  COLLATERAL_SUCCESS } from "@emmpair/actions/cnm"
-import  {
-  WITHDRAW_PENDING,
-  WITHDRAW_REJECT,
-  WITHDRAW_ERROR,
-  WITHDRAW_SUCCESS } from "@emmpair/actions/cnm"
+import { 
+  UpdateDepositInfoRequestAction,
+  CollateralSuccessAction,
+  WithdrawSuccessAction } from "@emmpair/actions/deposit"
+import {
+  UPDATE_DEPOSIT_INFO_REQUEST,
+  COLLATERAL_PENDING, COLLATERAL_REJECT, COLLATERAL_ERROR, COLLATERAL_SUCCESS,
+  WITHDRAW_PENDING, WITHDRAW_REJECT, WITHDRAW_ERROR, WITHDRAW_SUCCESS } from "@emmpair/actions/deposit"
 
-const initialState: TCnmState = {
+const initialState: TDepositState = {
   txCollateralStatus: 'idle',
   txWithdrawStatus: 'idle',
   collateralBalance: undefined,
@@ -22,32 +18,45 @@ const initialState: TCnmState = {
   borrowLimit: undefined,
 }
 
-// ===========================================
-
-const cnmReducer = createReducer(initialState, (builder) => {
+const depositReducer = createReducer(initialState, (builder) => {
   builder
-  .addCase(COLLATERAL_PENDING, (state: TCnmState) => {
+
+  .addCase(UPDATE_DEPOSIT_INFO_REQUEST, (
+    state: TDepositState,
+    action: UpdateDepositInfoRequestAction
+  ) => {
+    const { collateralBalance, collateralUsed, borrowLimit } = action.payload
+    state.collateralBalance = collateralBalance
+    state.collateralUsed = collateralUsed
+    state.borrowLimit = borrowLimit    
+  })
+
+  // ===========================================
+
+  .addCase(COLLATERAL_PENDING, (state: TDepositState) => {
     const { txCollateralStatus } = state
     if (['idle', 'reject', 'error'].includes(txCollateralStatus) ) {
       state.txCollateralStatus = 'pending'
     }
   })
-  .addCase(COLLATERAL_REJECT, (state: TCnmState) => {
+  .addCase(COLLATERAL_REJECT, (state: TDepositState) => {
     const { txCollateralStatus } = state
     if (txCollateralStatus === 'pending') {
       state.txCollateralStatus = 'reject'
     }
   })
-  .addCase(COLLATERAL_ERROR, (state: TCnmState) => {
+  .addCase(COLLATERAL_ERROR, (state: TDepositState) => {
     const { txCollateralStatus } = state
     if (txCollateralStatus === 'pending') {
       state.txCollateralStatus = 'error'
     }
   })
-  .addCase(COLLATERAL_SUCCESS, (state: TCnmState, action: CollateralSuccessAction) => {
+  .addCase(COLLATERAL_SUCCESS, (
+    state: TDepositState,
+    action: CollateralSuccessAction
+  ) => {
     const { txCollateralStatus } = state
     const { collateralBalance, collateralUsed, borrowLimit } = action.payload
-    // ..
     state.collateralBalance = collateralBalance
     state.collateralUsed = collateralUsed
     state.borrowLimit = borrowLimit    
@@ -58,28 +67,30 @@ const cnmReducer = createReducer(initialState, (builder) => {
 
   // ===========================================
 
-  .addCase(WITHDRAW_PENDING, (state: TCnmState) => {
+  .addCase(WITHDRAW_PENDING, (state: TDepositState) => {
     const { txWithdrawStatus } = state
     if (['idle', 'reject', 'error'].includes(txWithdrawStatus) ) {
       state.txWithdrawStatus = 'pending'
     }
   })
-  .addCase(WITHDRAW_REJECT, (state: TCnmState) => {
+  .addCase(WITHDRAW_REJECT, (state: TDepositState) => {
     const { txWithdrawStatus } = state
     if (txWithdrawStatus === 'pending') {
       state.txWithdrawStatus = 'reject'
     }
   })
-  .addCase(WITHDRAW_ERROR, (state: TCnmState) => {
+  .addCase(WITHDRAW_ERROR, (state: TDepositState) => {
     const { txWithdrawStatus } = state
     if (txWithdrawStatus === 'pending') {
       state.txWithdrawStatus = 'error'
     }
   })
-  .addCase(WITHDRAW_SUCCESS, (state: TCnmState, action: WithdrawSuccessAction) => {
+  .addCase(WITHDRAW_SUCCESS, (
+    state: TDepositState,
+    action: WithdrawSuccessAction
+  ) => {
     const { txWithdrawStatus } = state
     const { collateralBalance, collateralUsed, borrowLimit } = action.payload
-    // ..
     state.collateralBalance = collateralBalance
     state.collateralUsed = collateralUsed
     state.borrowLimit = borrowLimit    
@@ -90,4 +101,4 @@ const cnmReducer = createReducer(initialState, (builder) => {
 })
 
 
-export default cnmReducer
+export default depositReducer

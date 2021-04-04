@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux'
 import walletReducer from './wallet'
-import cnmReducer from "./cnm"
-
+import depositReducer from "./deposit"
+import tokenReducer from "./token"
 
 const rootReducer = combineReducers({
   wallet: walletReducer,
-  cnm: cnmReducer,
+  deposit: depositReducer,
+  token: tokenReducer,
 })
 
 export default rootReducer

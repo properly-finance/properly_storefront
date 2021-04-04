@@ -20,6 +20,7 @@ declare module "*.svg" {
 interface Window {
   ethereum: any
   ethers: any
-  cnmContract: any
+  depositContract: any
+  tokenContract: any
 }
 

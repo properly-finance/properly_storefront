@@ -12,6 +12,8 @@ services:
     environment:
     - PROJECT=${PROJECT}
     - SERVICE=${CONTAINER}
+    # ...
+    - APP_CNM_CONTRACT_ADDRESS=${CNM_CONTRACT_ADDRESS}
     volumes:
     - ${BASE_DIR}/properly_storefront:/usr/local/lib/properly_storefront
     - ${BASE_DIR}/properly_storefront/compose/runapp.sh:/usr/local/bin/runapp.sh

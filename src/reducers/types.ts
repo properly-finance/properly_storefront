@@ -5,7 +5,7 @@ export type TWalletState = {
   balance?: string
 }
 
-export type TCnmState = {
+export type TDepositState = {
   txCollateralStatus: string
   txWithdrawStatus: string  
   collateralBalance?: string
@@ -13,7 +13,14 @@ export type TCnmState = {
   borrowLimit?: string
 }
 
+export type TTokenState = {
+  txMintStatus: string
+  txBurnStatus: string    
+  balance?: string
+}
+
 export type TAppState = {
     wallet: TWalletState
-    cnm: TCnmState
+    deposit: TDepositState
+    token: TTokenState
 }

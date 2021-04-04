@@ -4,13 +4,13 @@ import { fetchBalance } from "@emmpair/meths/wallet";
 import { updateWalletRequest } from "@emmpair/actions/wallet";
 import { collateralSuccess, withdrawSuccess,
          collateralReject, withdrawReject,
-         collateralError, withdrawError } from "@emmpair/actions/cnm";
+         collateralError, withdrawError } from "@emmpair/actions/deposit";
 import { CollateralPendingAction,
-         WithdrawPendingAction } from "@emmpair/actions/cnm";
+         WithdrawPendingAction } from "@emmpair/actions/deposit";
 import { txCollateralizeEth, txWithdrawCollateral,
          fetchCollateralBalance,
          fetchCollateralUsed,
-         fetchBorrowLimit } from "@emmpair/meths/cnm";
+         fetchBorrowLimit } from "@emmpair/meths/deposit";
 
 // function callStub(text){
 //   return new Promise<string>(resolve => {
@@ -21,7 +21,7 @@ import { txCollateralizeEth, txWithdrawCollateral,
 // };
 
 
-function* cnmWrap(
+function* txWrap(
   account:string,
   amount:string,
   txMethod: typeof txCollateralizeEth | typeof txWithdrawCollateral,
@@ -31,22 +31,22 @@ function* cnmWrap(
 ) : Generator {
   try {
     const signer = window.ethers?.getSigner()
-    const cnmWithSigner = window.cnmContract.connect(signer)
+    const depositContractWithSigner = window.depositContract.connect(signer)
     const bnAmount = ethers.utils.parseEther(amount || "0")
 
-    yield call(txMethod, cnmWithSigner, bnAmount)
-    // ..
+    yield call(txMethod, depositContractWithSigner, bnAmount)
+
     const balance = yield call(fetchBalance, 
                                window.ethers,
                                account)    
     const collateralBalance = yield call(fetchCollateralBalance,
-                                         window.cnmContract,
+                                         window.depositContract,
                                          account)
     const collateralUsed = yield call(fetchCollateralUsed,
-                                      window.cnmContract,
+                                      window.depositContract,
                                       account)
     const borrowLimit = yield call(fetchBorrowLimit,
-                                   window.cnmContract,
+                                   window.depositContract,
                                    account)
     yield put(updateWalletRequest(
       balance.toString(),
@@ -68,17 +68,17 @@ function* cnmWrap(
   }
 }
 
-export function* collateralizeEth(action: CollateralPendingAction) {
+export function* collaterateDeposit(action: CollateralPendingAction) {
   const { account, amount } = action.payload 
-  yield call(cnmWrap,
+  yield call(txWrap,
     account, amount, txCollateralizeEth, 
     collateralSuccess, collateralReject, collateralError
   )
 }
 
-export function* withdrawCollateral(action: WithdrawPendingAction) {
+export function* withdrawDeposit(action: WithdrawPendingAction) {
   const { account, amount } = action.payload 
-  yield call(cnmWrap,
+  yield call(txWrap,
     account, amount, txWithdrawCollateral, 
     withdrawSuccess, withdrawReject, withdrawError
   )

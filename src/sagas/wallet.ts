@@ -1,17 +1,20 @@
 import { call, put } from 'redux-saga/effects';
 import { ethers } from "ethers";
-import cnmAbi from "@abis/cnm.json";
-import { APP_CNM_CONTRACT_ADDRESS } from "@emmpair/config";
+import depositABI from "@abis/deposit.json";
+import tokenABI from "@abis/token.json";
+import { APP_DEPOSIT_CONTRACT_ADDRESS,
+         APP_TOKEN_CONTRACT_ADDRESS } from "@emmpair/config";
 import { fetchNetwork, fetchBalance } from "@emmpair/meths/wallet";
-
 import { fetchCollateralBalance,
          fetchCollateralUsed,
-         fetchBorrowLimit } from "@emmpair/meths/cnm";
-
-import { collateralSuccess } from "@emmpair/actions/cnm";
+         fetchBorrowLimit } from "@emmpair/meths/deposit";
+import { collateralSuccess } from "@emmpair/actions/deposit";
 import { handshakeWalletError,
          handshakeWalletReject,
          handshakeWalletSuccess } from "@emmpair/actions/wallet";
+import { fetchTokenBalance } from "@emmpair/meths/token";
+import { updateTokenInfoRequest } from "@emmpair/actions/token";
+                  
 
 export function* handshakeWallet() {
   try {
@@ -20,21 +23,27 @@ export function* handshakeWallet() {
     const account = accounts[0]
     // ..
     window.ethers = new ethers.providers.Web3Provider(window.ethereum)
-    window.cnmContract = new ethers.Contract(APP_CNM_CONTRACT_ADDRESS,
-                                             cnmAbi,
-                                             window.ethers)    
+    window.depositContract = new ethers.Contract(APP_DEPOSIT_CONTRACT_ADDRESS,
+                                             depositABI,
+                                             window.ethers)
+    window.tokenContract = new ethers.Contract(APP_TOKEN_CONTRACT_ADDRESS,
+                                             tokenABI,
+                                             window.ethers)
     // ..
     const network = yield call(fetchNetwork, window.ethers)
     const balance = yield call(fetchBalance, window.ethers, account)
     // ..
     const collateralBalance = yield call(fetchCollateralBalance,
-                                         window.cnmContract,
+                                         window.depositContract,
                                          account)
     const collateralUsed = yield call(fetchCollateralUsed,
-                                      window.cnmContract,
+                                      window.depositContract,
                                       account)
     const borrowLimit = yield call(fetchBorrowLimit,
-                                   window.cnmContract,
+                                   window.depositContract,
+                                   account)
+    const tokenBalance = yield call(fetchTokenBalance,
+                                   window.tokenContract,
                                    account)
     yield put(handshakeWalletSuccess(
       account, 
@@ -46,6 +55,9 @@ export function* handshakeWallet() {
       collateralUsed.toString(),
       borrowLimit.toString(),
     ))
+    yield put(updateTokenInfoRequest(
+      tokenBalance.toString(),
+    ))    
   } catch (error) {
     console.log(error.message)
     if (error.code == 4001){
