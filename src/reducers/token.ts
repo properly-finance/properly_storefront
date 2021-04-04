@@ -3,15 +3,19 @@ import { TTokenState } from "./types"
 import { createReducer } from '@reduxjs/toolkit'
 import { UpdateTokenInfoRequestAction, 
          MintSuccessAction,
-         BurnSuccessAction } from "@emmpair/actions/token"
+         BurnSuccessAction,
+         ApproveBurnSuccessAction } from "@emmpair/actions/token"
 import { UPDATE_TOKEN_INFO_REQUEST,
          MINT_PENDING, MINT_REJECT, MINT_ERROR, MINT_SUCCESS,
-         BURN_PENDING, BURN_REJECT, BURN_ERROR, BURN_SUCCESS } from "@emmpair/actions/token"
+         BURN_PENDING, BURN_REJECT, BURN_ERROR, BURN_SUCCESS,
+         APPROVE_BURN_PENDING, APPROVE_BURN_REJECT, APPROVE_BURN_ERROR, APPROVE_BURN_SUCCESS } from "@emmpair/actions/token"
 
 const initialState: TTokenState = {
   txMintStatus: 'idle',
   txBurnStatus: 'idle',
+  txApproveBurnStatus: 'idle',  
   balance: undefined,
+  allowBurnBalance: undefined,
 }
 
 const tokenReducer = createReducer(initialState, (builder) => {
@@ -21,9 +25,12 @@ const tokenReducer = createReducer(initialState, (builder) => {
     state: TTokenState,
     action: UpdateTokenInfoRequestAction
   ) => {
-    const { balance } = action.payload
+    const { balance, allowBurnBalance } = action.payload
     state.balance = balance
+    state.allowBurnBalance = allowBurnBalance
   }) 
+
+  // ........................................
 
   .addCase(MINT_PENDING, (state: TTokenState) => {
     const { txMintStatus } = state
@@ -52,6 +59,8 @@ const tokenReducer = createReducer(initialState, (builder) => {
     }
   })
 
+  // ........................................
+
   .addCase(BURN_PENDING, (state: TTokenState) => {
     const { txBurnStatus } = state
     if (['idle', 'reject', 'error'].includes(txBurnStatus) ) {
@@ -72,12 +81,46 @@ const tokenReducer = createReducer(initialState, (builder) => {
   })
   .addCase(BURN_SUCCESS, (state: TTokenState, action: BurnSuccessAction) => {
     const { txBurnStatus } = state
-    const { balance  } = action.payload
+    const { balance, allowBurnBalance  } = action.payload
     state.balance  = balance 
+    state.allowBurnBalance = allowBurnBalance
     if (txBurnStatus === 'pending') {
       state.txBurnStatus = 'idle'
     }
-  })  
+  })
+
+  // ........................................
+
+  .addCase(APPROVE_BURN_PENDING, (state: TTokenState) => {
+    const { txApproveBurnStatus } = state
+    if (['idle', 'reject', 'error'].includes(txApproveBurnStatus) ) {
+      state.txApproveBurnStatus = 'pending'
+    }
+  })
+  .addCase(APPROVE_BURN_REJECT, (state: TTokenState) => {
+    const { txApproveBurnStatus } = state
+    if (txApproveBurnStatus === 'pending') {
+      state.txApproveBurnStatus = 'reject'
+    }
+  })
+  .addCase(APPROVE_BURN_ERROR, (state: TTokenState) => {
+    const { txApproveBurnStatus } = state
+    if (txApproveBurnStatus === 'pending') {
+      state.txApproveBurnStatus = 'error'
+    }
+  })
+  .addCase(APPROVE_BURN_SUCCESS, (
+    state: TTokenState,
+    action: ApproveBurnSuccessAction
+  ) => {
+    const { txApproveBurnStatus } = state
+    const { balance  } = action.payload
+    state.allowBurnBalance  = balance
+    if (txApproveBurnStatus === 'pending') {
+      state.txApproveBurnStatus = 'idle'
+    }
+  })
+
 })
 
 

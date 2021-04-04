@@ -11,10 +11,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 // import Divider from '@material-ui/core/Divider';
-import { deepOrange } from '@material-ui/core/colors';
+import { deepOrange, green } from '@material-ui/core/colors';
 import classNames from "classnames";
 import { pollDeposit, pollToken,
-         useMintAsset, useBurnAsset } from "@emmpair/hooks/useContract";
+         useMintAsset, useApproveBurnAsset, useBurnAsset } from "@emmpair/hooks/useContract";
 import { pollWallet } from "@emmpair/hooks/useWallet";
 
 type State = {
@@ -62,7 +62,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   button:{
     width: '100%',    
-  }
+  },
+  burnWrap: {
+    display: "flex",
+  },
+  burnDivider: {
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),    
+  },
 }),{ name: "CollateralPane" })
 
 const ColorButton = withStyles((theme: Theme) => ({
@@ -71,6 +78,16 @@ const ColorButton = withStyles((theme: Theme) => ({
     backgroundColor: deepOrange[500],
     '&:hover': {
       backgroundColor: deepOrange[700],
+    },
+  },
+}))(Button)
+
+const GreenColorButton = withStyles((theme: Theme) => ({
+  root: {
+    color: theme.palette.getContrastText(green[500]),
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
     },
   },
 }))(Button)
@@ -101,11 +118,13 @@ export default function MintPane():JSX.Element {
     mintAmount: "",
     burnAmount: "",
   })
-  const { txMintStatus, txBurnStatus, balance } = pollToken()
+  const { txMintStatus, txBurnStatus, txApproveBurnStatus,
+          balance, allowBurnBalance } = pollToken()
   const { txCollateralStatus, txWithdrawStatus } = pollDeposit()
   const { account } = pollWallet()
   const mintAsset = useMintAsset()
   const burnAsset = useBurnAsset()
+  const approveBurnAsset = useApproveBurnAsset()
 
   // @method!!!
   function handleChange (prop: keyof State){
@@ -114,14 +133,18 @@ export default function MintPane():JSX.Element {
     }
   }
 
-  // @method!!!  
   function handleMint(event: React.MouseEvent<HTMLButtonElement>){
     event.preventDefault()
     mintAsset(account, values.mintAmount)
     // console.log(values.mintAmount)
   }
 
-  // @method!!!  
+  function handleApproveBurn(event: React.MouseEvent<HTMLButtonElement>){
+    event.preventDefault()
+    approveBurnAsset(account, values.burnAmount)
+    // console.log(values.burnAmount)
+  }
+
   function handleBurn(event: React.MouseEvent<HTMLButtonElement>){
     event.preventDefault()
     burnAsset(account, values.burnAmount)
@@ -163,6 +186,7 @@ export default function MintPane():JSX.Element {
           data-test="submit"
           disabled={ txMintStatus == 'pending'
             || txBurnStatus == 'pending'
+            || txApproveBurnStatus == 'pending'
             || txCollateralStatus == 'pending'
             || txWithdrawStatus == 'pending'
             || !account }
@@ -192,7 +216,24 @@ export default function MintPane():JSX.Element {
           />
         </FormControl>
       </ListItem>
-      <ListItem>
+      <ListItem className={classes.burnWrap}>
+        <GreenColorButton
+          className={classes.button}
+          color="primary"          
+          variant="contained"
+          onClick={handleApproveBurn}
+          type="submit"
+          data-test="submit"
+          disabled={ txMintStatus == 'pending'
+            || txBurnStatus == 'pending'
+            || txApproveBurnStatus == 'pending'
+            || txCollateralStatus == 'pending'
+            || txWithdrawStatus == 'pending'
+            || !account }
+        >
+          Approve { txApproveBurnStatus != 'idle' &&  `${txApproveBurnStatus}...` }
+        </GreenColorButton>
+        <div className={classes.burnDivider} />
         <ColorButton
           className={classes.button}
           color="primary"          
@@ -202,6 +243,7 @@ export default function MintPane():JSX.Element {
           data-test="submit"
           disabled={ txMintStatus == 'pending'
             || txBurnStatus == 'pending'
+            || txApproveBurnStatus == 'pending'
             || txCollateralStatus == 'pending'
             || txWithdrawStatus == 'pending'
             || !account }
@@ -218,6 +260,12 @@ export default function MintPane():JSX.Element {
                         && `${balance} Token` 
                         || '...'}/>
       </ListItem>
+      <ListItem>
+        <ListItemText primary="Allowance burn"
+                      secondary={ allowBurnBalance
+                        && `${allowBurnBalance} Token` 
+                        || '...'}/>
+      </ListItem>      
     </List>
     </>
   )

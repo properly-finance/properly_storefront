@@ -15,8 +15,10 @@ export type TDepositState = {
 
 export type TTokenState = {
   txMintStatus: string
-  txBurnStatus: string    
+  txBurnStatus: string
+  txApproveBurnStatus: string
   balance?: string
+  allowBurnBalance?: string
 }
 
 export type TAppState = {

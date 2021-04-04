@@ -3,8 +3,8 @@ import { HANDSHAKE_WALLET_PENDING } from "@emmpair/actions/wallet"
 import { handshakeWallet } from "./wallet"
 import { COLLATERAL_PENDING, WITHDRAW_PENDING } from "@emmpair/actions/deposit"
 import { collaterateDeposit, withdrawDeposit } from "./deposit"
-import { MINT_PENDING, BURN_PENDING } from "@emmpair/actions/token"
-import { mintToken, burnToken } from "./token"
+import { MINT_PENDING, BURN_PENDING, APPROVE_BURN_PENDING } from "@emmpair/actions/token"
+import { mintToken, burnToken, approveBurnToken } from "./token"
 
 
 function* rootSaga() {
@@ -14,6 +14,7 @@ function* rootSaga() {
     takeEvery(WITHDRAW_PENDING, withdrawDeposit),
     takeEvery(MINT_PENDING, mintToken),
     takeEvery(BURN_PENDING, burnToken),
+    takeEvery(APPROVE_BURN_PENDING, approveBurnToken),
   ])
 }
 

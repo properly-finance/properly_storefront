@@ -104,7 +104,7 @@ export default function CollateralPane():JSX.Element {
   })
   const { txCollateralStatus,txWithdrawStatus,
           collateralBalance, collateralUsed, borrowLimit } = pollDeposit()
-  const { txMintStatus, txBurnStatus } = pollToken()          
+  const { txMintStatus, txBurnStatus, txApproveBurnStatus } = pollToken()          
   const { account } = pollWallet()
   const collaterateDeposit = useCollaterateDeposit()
   const withdrawDeposit = useWithdrawDeposit()
@@ -166,6 +166,7 @@ export default function CollateralPane():JSX.Element {
             || txWithdrawStatus == 'pending'
             || txMintStatus == 'pending'
             || txBurnStatus == 'pending'
+            || txApproveBurnStatus == 'pending'
             || !account }
         >
           Deposit { txCollateralStatus != 'idle' &&  `${txCollateralStatus}...` }
@@ -205,6 +206,7 @@ export default function CollateralPane():JSX.Element {
             || txWithdrawStatus == 'pending'
             || txMintStatus == 'pending'
             || txBurnStatus == 'pending'
+            || txApproveBurnStatus == 'pending'
             || !account }
         >
           Withdraw { txWithdrawStatus != 'idle' &&  `${txWithdrawStatus}...` }

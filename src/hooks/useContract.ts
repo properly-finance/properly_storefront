@@ -3,7 +3,7 @@ import { useSelector, useDispatch  } from 'react-redux';
 import { TAppState, TDepositState, TTokenState } from "@emmpair/reducers/types";
 import { TAppDispatch } from "@emmpair/types";
 import { collateralPending, withdrawPending } from "@emmpair/actions/deposit";
-import { mintPending, burnPending } from "@emmpair/actions/token";
+import { mintPending, approveBurnPending, burnPending } from "@emmpair/actions/token";
 
 // pools
 // 
@@ -44,6 +44,15 @@ export function useMintAsset(
   return useCallback((
     account: string, amount: string
   ) => dispatch(mintPending(account, amount)), [dispatch])
+}
+
+export function useApproveBurnAsset(
+  // pass
+): (account: string, amount: string) => void {
+  const dispatch = useDispatch<TAppDispatch>()
+  return useCallback((
+    account: string, amount: string
+  ) => dispatch(approveBurnPending(account, amount)), [dispatch])
 }
 
 export function useBurnAsset(
