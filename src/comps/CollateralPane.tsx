@@ -62,7 +62,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
   },
   button:{
+    width: '100%',
+  },
+  pendingButton:{
     width: '100%',    
+    "& span.MuiButton-label": {
+      color: theme.palette["textHighlighted"]["active"],
+    }
   }
 }),{ name: "CollateralPane" });
 
@@ -156,7 +162,9 @@ export default function CollateralPane():JSX.Element {
       </ListItem>
       <ListItem>
         <Button
-          className={classes.button}
+          className={txCollateralStatus == 'pending'
+            ? classes.pendingButton
+            : classes.button}
           color="primary"
           variant="contained"
           onClick={handleDeposit}
@@ -196,7 +204,9 @@ export default function CollateralPane():JSX.Element {
       </ListItem>
       <ListItem>
         <ColorButton
-          className={classes.button}
+          className={txWithdrawStatus == 'pending'
+            ? classes.pendingButton
+            : classes.button}
           color="primary"          
           variant="contained"
           onClick={handleWithdraw}

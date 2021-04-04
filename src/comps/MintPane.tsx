@@ -63,6 +63,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   button:{
     width: '100%',    
   },
+  pendingButton:{
+    width: '100%',    
+    "& span.MuiButton-label": {
+      color: theme.palette["textHighlighted"]["active"],
+    }
+  },
   burnWrap: {
     display: "flex",
   },
@@ -178,7 +184,9 @@ export default function MintPane():JSX.Element {
       </ListItem>
       <ListItem>
         <Button
-          className={classes.button}
+          className={txMintStatus == 'pending'
+            ? classes.pendingButton
+            : classes.button}
           color="primary"
           variant="contained"
           onClick={handleMint}
@@ -218,7 +226,9 @@ export default function MintPane():JSX.Element {
       </ListItem>
       <ListItem className={classes.burnWrap}>
         <GreenColorButton
-          className={classes.button}
+          className={txApproveBurnStatus == 'pending'
+            ? classes.pendingButton
+            : classes.button}
           color="primary"          
           variant="contained"
           onClick={handleApproveBurn}
@@ -235,7 +245,9 @@ export default function MintPane():JSX.Element {
         </GreenColorButton>
         <div className={classes.burnDivider} />
         <ColorButton
-          className={classes.button}
+          className={txBurnStatus == 'pending'
+            ? classes.pendingButton
+            : classes.button}
           color="primary"          
           variant="contained"
           onClick={handleBurn}
