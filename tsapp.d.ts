@@ -22,5 +22,6 @@ interface Window {
   ethers: any
   depositContract: any
   tokenContract: any
+  farmContract: any
 }
 

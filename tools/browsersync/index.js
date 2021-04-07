@@ -2,7 +2,7 @@ import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import wpConfig, { mwConfig as wpMwConfig} from '../webpack'
 // import proxyMiddleware from 'http-proxy-middleware'
-
+const history = require('connect-history-api-fallback');
 
 const bundler = webpack(wpConfig)
 const webpackMw = webpackDevMiddleware(bundler, wpMwConfig)
@@ -20,6 +20,7 @@ export default {
     watch: true,
     server: {
         middleware: [
+            history({}),        
             webpackMw,
             // proxyMw,
         ]

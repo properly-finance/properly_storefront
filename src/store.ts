@@ -1,9 +1,13 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { createBrowserHistory } from 'history'
 import createSagaMiddleware from 'redux-saga'
-import rootReducer from "./reducers"
+import { routerMiddleware } from 'connected-react-router'
+import createRootReducer from "./reducers"
 import rootSaga from "./sagas"
 import { DEBUG } from "./config"
 
+export const history = createBrowserHistory()
+const rootReducer = createRootReducer(history)
 const sagaMiddleware = createSagaMiddleware()
 const defaultMiddleware = getDefaultMiddleware({
   thunk: false,
@@ -13,7 +17,11 @@ const defaultMiddleware = getDefaultMiddleware({
 const store = configureStore({
   reducer: rootReducer,
   devTools: DEBUG,
-  middleware: [ ...defaultMiddleware, sagaMiddleware ],
+  middleware: [ 
+    ...defaultMiddleware,
+    sagaMiddleware,
+    routerMiddleware(history)
+  ],
 })
 
 sagaMiddleware.run(rootSaga)

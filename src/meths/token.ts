@@ -1,3 +1,7 @@
+export function fetchTokenName(tokenContract){
+  return tokenContract.name()
+}
+
 export function fetchTokenBalance(
   tokenContract,
   account: string

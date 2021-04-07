@@ -1,5 +1,5 @@
 import { call, put } from 'redux-saga/effects'
-import { APP_DEPOSIT_CONTRACT_ADDRESS } from "@emmpair/config";
+import { APP_DEPOSIT_CONTRACT_ADDRESS } from "@emmpair/config"
 import { updateDepositInfoRequest } from "@emmpair/actions/deposit"
 import { MintPendingAction, BurnPendingAction, ApproveBurnPendingAction,
          mintSuccess, burnSuccess, approveBurnSuccess,

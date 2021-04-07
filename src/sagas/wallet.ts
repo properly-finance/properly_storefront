@@ -3,7 +3,8 @@ import { ethers } from "ethers";
 import depositABI from "@abis/deposit.json";
 import tokenABI from "@abis/token.json";
 import { APP_DEPOSIT_CONTRACT_ADDRESS,
-         APP_TOKEN_CONTRACT_ADDRESS } from "@emmpair/config";
+         APP_TOKEN_CONTRACT_ADDRESS,
+         APP_FARM_CONTRACT_ADDRESS } from "@emmpair/config";
 import { fetchNetwork, fetchBalance } from "@emmpair/meths/wallet";
 import { fetchCollateralBalance,
          fetchCollateralUsed,
@@ -28,6 +29,9 @@ export function* handshakeWallet() {
                                              depositABI,
                                              window.ethers)
     window.tokenContract = new ethers.Contract(APP_TOKEN_CONTRACT_ADDRESS,
+                                             tokenABI,
+                                             window.ethers)
+    window.farmContract = new ethers.Contract(APP_FARM_CONTRACT_ADDRESS,
                                              tokenABI,
                                              window.ethers)
     // ..

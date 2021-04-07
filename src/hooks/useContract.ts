@@ -1,22 +1,20 @@
 import { useCallback } from 'react';
 import { useSelector, useDispatch  } from 'react-redux';
-import { TAppState, TDepositState, TTokenState } from "@emmpair/reducers/types";
+import { TAppState, TDepositState, TTokenState, TFarmState } from "@emmpair/reducers/types";
 import { TAppDispatch } from "@emmpair/types";
 import { collateralPending, withdrawPending } from "@emmpair/actions/deposit";
 import { mintPending, approveBurnPending, burnPending } from "@emmpair/actions/token";
+import { fetchFarmsPending } from "@emmpair/actions/farm"
 
-// pools
-// 
+
+
+// deposit
+// =======
+
 export function pollDeposit(): TDepositState {
   return useSelector((state: TAppState) => state.deposit)
 }
 
-export function pollToken(): TTokenState {
-  return useSelector((state: TAppState) => state.token)
-}
-
-// deposit
-// 
 export function useCollaterateDeposit(
   // pass
 ): (account: string, amount: string) => void {
@@ -36,7 +34,12 @@ export function useWithdrawDeposit(
 }
 
 // token
-// 
+// =====
+
+export function pollToken(): TTokenState {
+  return useSelector((state: TAppState) => state.token)
+}
+
 export function useMintAsset(
   // pass
 ): (account: string, amount: string) => void {
@@ -62,4 +65,20 @@ export function useBurnAsset(
   return useCallback((
     account: string, amount: string
   ) => dispatch(burnPending(account, amount)), [dispatch])
+}
+
+// farm
+// ====
+
+export function pollFarm(): TFarmState {
+  return useSelector((state: TAppState) => state.farm)
+}
+
+export function useFetchFarms(
+  // pass
+): (offset: number, limit: number) => void {
+  const dispatch = useDispatch<TAppDispatch>()
+  return useCallback((
+    offset: number, limit: number
+  ) => dispatch(fetchFarmsPending(offset, limit)), [dispatch])
 }

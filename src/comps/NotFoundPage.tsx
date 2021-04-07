@@ -6,7 +6,7 @@ import SVG from "react-inlinesvg";
 // import { FormattedMessage } from "react-intl";
 import notFoundImage from "@assets/images/not-found-404.svg";
 
-interface INotFoundPageProps {
+interface INotFoundPage {
   onBack: () => void;
 }
 
@@ -53,7 +53,7 @@ const useStyles = makeStyles(
   { name: "NotFoundPage" }
 );
 
-const NotFoundPage: React.FC<INotFoundPageProps> = props => {
+const NotFoundPage: React.FC<INotFoundPage> = props => {
   const { onBack } = props;
   const classes = useStyles(props);
 

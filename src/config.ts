@@ -6,3 +6,4 @@ export const APP_VERSION = packageInfo.version
 
 export const APP_DEPOSIT_CONTRACT_ADDRESS = process.env.APP_DEPOSIT_CONTRACT_ADDRESS
 export const APP_TOKEN_CONTRACT_ADDRESS = process.env.APP_TOKEN_CONTRACT_ADDRESS
+export const APP_FARM_CONTRACT_ADDRESS = process.env.APP_FARM_CONTRACT_ADDRESS
