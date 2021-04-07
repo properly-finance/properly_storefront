@@ -58,19 +58,35 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface IFarmList {
   farms: [] | TFarms
+  account?: string
+  navigate: (path: string)=>void
 }
 
 const FarmList: React.FC<IFarmList> = (props) => {
-  const { farms } = props
+  const { farms, account, navigate } = props
   const classes = useStyles()
+
+  function handleNavigate(event, url: string){
+    event.preventDefault()    
+    if (account){
+      navigate(url)
+    }
+  }
+  // const handleNavigate = (url: string) => {
+  //   console.log(url)    
+  // }
+
   return (
     <div className={classes.root}>
       { farms.length ? (
         <div className={classes.configurationItem}>
           {farms.map((farm, farmKey) => (
             <Card
-              className={classes.card}
-              onClick={() => {}}
+              className={account
+                ? classes.card
+                : classes.cardDisabled
+              }
+              onClick={(e)=>handleNavigate(e, `/farm/${farm.lpToken}`)}
               key={farmKey}
             >
               <CardContent className={classes.cardContent}>

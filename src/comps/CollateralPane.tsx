@@ -115,20 +115,17 @@ export default function CollateralPane():JSX.Element {
   const collaterateDeposit = useCollaterateDeposit()
   const withdrawDeposit = useWithdrawDeposit()
 
-  // @method!!!
   function handleChange (prop: keyof State){
     return function(event: React.ChangeEvent<HTMLInputElement>){
       setValues({ ...values, [prop]: event.target.value });
     }
-  };  
+  }
 
-  // @method!!!  
   function handleDeposit(event: React.MouseEvent<HTMLButtonElement>){
     event.preventDefault()
     collaterateDeposit(account, values.depositAmount)
   }
 
-  // @method!!!  
   function handleWithdraw(event: React.MouseEvent<HTMLButtonElement>){
     event.preventDefault()
     withdrawDeposit(account, values.withdrawAmount)

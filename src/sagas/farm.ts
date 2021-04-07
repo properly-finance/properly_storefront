@@ -13,14 +13,11 @@ import { fetchFarmsReject,
 export function* fetchFarms(action: FetchFarmsPending) {
   const { offset, limit } = action.payload 
   const provider = new ethers.providers.Web3Provider(window.ethereum)
-  if (!window.farmContract) {
-    window.farmContract = new ethers.Contract(APP_FARM_CONTRACT_ADDRESS,
-                                              farmABI,
-                                              provider)
-  }
-
+  const farmContract = new ethers.Contract(APP_FARM_CONTRACT_ADDRESS,
+                                            farmABI,
+                                            provider)
   try { 
-    const bigFarmsCount = yield call(fetchFarmsCount, window.farmContract)
+    const bigFarmsCount = yield call(fetchFarmsCount, farmContract)
     const farmsCount = Number(`${bigFarmsCount}`)
     const fix1Offset = offset > farmsCount 
                        ? farmsCount - limit
@@ -33,7 +30,7 @@ export function* fetchFarms(action: FetchFarmsPending) {
                      : fix2Offset + limit
     const qbatch = []
     for (var i = fix2Offset; i < fixLimit; i++) {
-      qbatch.push(call(fetchFarmInfo, window.farmContract, i))
+      qbatch.push(call(fetchFarmInfo, farmContract, i))
     }
     const farms = qbatch.length > 0
                 ? yield all(qbatch)  

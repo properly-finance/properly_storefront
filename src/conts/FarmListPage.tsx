@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import Button from "@material-ui/core/Button"
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import PageToolBar from "@emmpair/comps/PageToolBar"
-import { pollRouter } from "@emmpair/hooks/useNavigator"
+import useNavigator, { pollRouter } from "@emmpair/hooks/useNavigator"
 import FarmList from "@emmpair/comps/FarmList"
 import { pollFarm, useFetchFarms } from "@emmpair/hooks/useContract"
 import { pollWallet } from "@emmpair/hooks/useWallet"
@@ -19,6 +19,7 @@ const FarmListPage: React.FC = () => {
   const { farms, limit, offset } = pollFarm()
   const { account } = pollWallet()  
   const fetchFarms = useFetchFarms()
+  const navigate = useNavigator()
 
   useEffect(() => {
     // useFetchFarms(offset + limit, limit)
@@ -32,12 +33,16 @@ const FarmListPage: React.FC = () => {
           onClick={()=>{}}
           color="primary"
           variant="contained"
-          disabled={ !account }          
+          disabled={!account}          
         >
           Add
         </Button>
       </PageToolBar>
-      <FarmList farms={farms}/> 
+      <FarmList 
+        farms={farms}
+        account={account}
+        navigate={navigate}
+      /> 
     </div>
   )
 }

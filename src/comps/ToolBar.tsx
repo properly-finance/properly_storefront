@@ -22,6 +22,8 @@ export const ToolBar: React.FC = () => {
   const navigate = useNavigator()
   const classes = useStyles()
   const { location:{ pathname }} = pollRouter()
+  const path = pathname.split('/')[1]
+
 
   function handleChange (
     event: React.ChangeEvent<THTMLInputElement>, 
@@ -36,7 +38,7 @@ export const ToolBar: React.FC = () => {
   return (
     <div className={classes.root}>    
       <Tabs
-          value={pathname}
+          value={`/${path}`}
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"

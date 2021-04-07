@@ -13,9 +13,6 @@ import SectionRoute from "./comps/SectionRoute"
 import DepositSection from "./sections/DepositSection"
 import FarmSection from "./sections/FarmSection"
 
-
-
-
 function App():JSX.Element {
   return (
     <ReduxProvider store={store}>
@@ -26,6 +23,7 @@ function App():JSX.Element {
               <Switch>
                 <SectionRoute exact path="/" component={DepositSection} />
                 <SectionRoute exact path="/farm" component={FarmSection} />
+                <SectionRoute exact path="/farm/:token" component={FarmSection} />
                 <Route component={NotFound} />        
               </Switch>
             </LayoutSection>
