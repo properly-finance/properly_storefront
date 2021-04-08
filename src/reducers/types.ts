@@ -24,7 +24,9 @@ export type TTokenState = {
 }
 
 export type TFarm = {
+  pid: number
   name: string
+  allowance: string
   lpToken: string
   depositFeeBP: number
   accPROPPerShare: string
@@ -32,13 +34,11 @@ export type TFarm = {
   lastRewardBlock: string
 }
 
-export type TFarms = [Record<string, TFarm>]
+export type TFarms = [TFarm]
 
 export type TFarmState = {
   txFetchFarmsStatus: string
-  txCreateFarmStatus: string
-  txUpdateFarmStatus: string
-  txDeleteFarmStatus: string  
+  txIncreaseFarmTokenAllowanceStatus: string
   farms: [] | TFarms
   limit: number
   offset: number

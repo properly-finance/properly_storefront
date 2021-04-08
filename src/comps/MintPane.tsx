@@ -132,7 +132,6 @@ export default function MintPane():JSX.Element {
   const burnAsset = useBurnAsset()
   const approveBurnAsset = useApproveBurnAsset()
 
-  // @method!!!
   function handleChange (prop: keyof State){
     return function(event: React.ChangeEvent<HTMLInputElement>){
       setValues({ ...values, [prop]: event.target.value })

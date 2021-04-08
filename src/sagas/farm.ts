@@ -3,15 +3,26 @@ import { ethers } from "ethers"
 import { APP_FARM_CONTRACT_ADDRESS } from "@emmpair/config"
 import farmABI from "@abis/farm.json"
 import tokenABI from "@abis/token.json"
-import { FetchFarmsPending } from "@emmpair/actions/farm"
-import { fetchFarmsCount, fetchFarmInfo } from "@emmpair/meths/farm"
-import { fetchTokenName } from "@emmpair/meths/token"
-import { fetchFarmsReject,
-         fetchFarmsError,
-         fetchFarmsSuccess } from "@emmpair/actions/farm"
+import { 
+  fetchFarmsCount,
+  fetchFarmInfo } from "@emmpair/meths/farm"
+import { 
+  fetchTokenName,
+  fetchTokenAllowance,
+  txIncreaseTokenAllowance } from "@emmpair/meths/token"
+import { 
+  FetchFarmsPending,
+  fetchFarmsReject,
+  fetchFarmsError,
+  fetchFarmsSuccess } from "@emmpair/actions/farm"
+import {
+  IncreaseFarmTokenAllowancePendingAction,
+  increaseFarmTokenAllowanceReject,
+  increaseFarmTokenAllowanceError,
+  increaseFarmTokenAllowanceSuccess } from "@emmpair/actions/farm"
 
 export function* fetchFarms(action: FetchFarmsPending) {
-  const { offset, limit } = action.payload 
+  const { account, offset, limit } = action.payload 
   const provider = new ethers.providers.Web3Provider(window.ethereum)
   const farmContract = new ethers.Contract(APP_FARM_CONTRACT_ADDRESS,
                                             farmABI,
@@ -35,15 +46,30 @@ export function* fetchFarms(action: FetchFarmsPending) {
     const farms = qbatch.length > 0
                 ? yield all(qbatch)  
                 : []
-    const qbatch_names = farms.map((farm) => (call(
-      fetchTokenName, 
+    const tookens_contracts = farms.map((farm) => (
       new ethers.Contract(farm.lpToken, tokenABI, provider)
-    )))
+    ))
+
+    const qbatch_names = tookens_contracts.map((contract) => (
+      call(fetchTokenName, contract)
+    ))
     const farms_token_names = qbatch_names.length > 0
-                              ? yield all(qbatch_names)
-                              : []
-    const sfarms = farms.map((farm, key) => ({
+      ? yield all(qbatch_names)
+      : []
+
+    const farms_allowance_batch = account 
+      ? tookens_contracts.map((contract) => (
+          call(fetchTokenAllowance, 
+               contract, account, APP_FARM_CONTRACT_ADDRESS)))
+      : []
+    const farms_allowance = farms_allowance_batch.length > 0
+      ? yield all(farms_allowance_batch)
+      : []
+
+    const farmsMap = farms.map((farm, key) => ({
+      pid: fix2Offset + key,
       name: farms_token_names[key],
+      allowance: farms_allowance.length > 0 ? farms_allowance[key].toString() : 0,
       lpToken: farm.lpToken,
       depositFeeBP: farm.depositFeeBP,
       accPROPPerShare: farm.accPROPPerShare.toString(),
@@ -51,7 +77,7 @@ export function* fetchFarms(action: FetchFarmsPending) {
       lastRewardBlock: farm.lastRewardBlock.toString(),
     }))
 
-    yield put(fetchFarmsSuccess(sfarms, farmsCount))
+    yield put(fetchFarmsSuccess(farmsMap, farmsCount))
     console.log('loded...')    
   } catch (error) {
     console.log(error.message)
@@ -59,7 +85,44 @@ export function* fetchFarms(action: FetchFarmsPending) {
       yield put(fetchFarmsReject())
     } else {
       yield put(fetchFarmsError())
-    };
-  };
+    }
+  }
+}
 
+export function* increaseAllowanceTokenFarm(
+  action: IncreaseFarmTokenAllowancePendingAction
+) {
+  const { 
+    accountAddr,
+    tokenAddr,
+    amount,
+    farmKey } = action.payload 
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const tokenContract = new ethers.Contract(tokenAddr, tokenABI, provider)
+    const signer = window.ethers?.getSigner()
+    const tokenContractWithSigner = tokenContract.connect(signer)    
+        
+    yield call(txIncreaseTokenAllowance,
+               tokenContractWithSigner,
+               APP_FARM_CONTRACT_ADDRESS,
+               amount)
+    const allowance = yield call(fetchTokenAllowance,
+                                 tokenContract,
+                                 accountAddr,
+                                 APP_FARM_CONTRACT_ADDRESS)
+    yield put(increaseFarmTokenAllowanceSuccess(
+      allowance.toString(),
+      farmKey
+    ))
+  } catch (error) {
+    console.log(error.message)
+    if (error.code == 4001){
+      yield put(increaseFarmTokenAllowanceReject())      
+    } else if (error.code == -32000 ){
+      yield put(increaseFarmTokenAllowanceReject())
+    } else {
+      yield put(increaseFarmTokenAllowanceError())
+    }
+  }
 }

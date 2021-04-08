@@ -23,7 +23,6 @@ function App():JSX.Element {
               <Switch>
                 <SectionRoute exact path="/" component={DepositSection} />
                 <SectionRoute exact path="/farm" component={FarmSection} />
-                <SectionRoute exact path="/farm/:token" component={FarmSection} />
                 <Route component={NotFound} />        
               </Switch>
             </LayoutSection>

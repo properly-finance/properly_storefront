@@ -14,7 +14,7 @@ import { handshakeWalletError,
          handshakeWalletReject,
          handshakeWalletSuccess } from "@emmpair/actions/wallet";
 import { fetchTokenBalance,
-         fetchTokenBurnBalance } from "@emmpair/meths/token";
+         fetchTokenAllowance } from "@emmpair/meths/token";
 import { updateTokenInfoRequest } from "@emmpair/actions/token";
                   
 
@@ -50,7 +50,7 @@ export function* handshakeWallet() {
     const tokenBalance = yield call(fetchTokenBalance,
                                    window.tokenContract,
                                    accountAddr)
-    const tokenAllowBurnBalance = yield call(fetchTokenBurnBalance,
+    const tokenAllowBurnBalance = yield call(fetchTokenAllowance,
                                    window.tokenContract,
                                    accountAddr,
                                    APP_DEPOSIT_CONTRACT_ADDRESS)

@@ -4,7 +4,8 @@ import { TAppState, TDepositState, TTokenState, TFarmState } from "@emmpair/redu
 import { TAppDispatch } from "@emmpair/types";
 import { collateralPending, withdrawPending } from "@emmpair/actions/deposit";
 import { mintPending, approveBurnPending, burnPending } from "@emmpair/actions/token";
-import { fetchFarmsPending } from "@emmpair/actions/farm"
+import { fetchFarmsPending, 
+         increaseFarmTokenAllowancePending } from "@emmpair/actions/farm"
 
 
 
@@ -76,9 +77,22 @@ export function pollFarm(): TFarmState {
 
 export function useFetchFarms(
   // pass
-): (offset: number, limit: number) => void {
+): (account: string | undefined, offset: number, limit: number) => void {
   const dispatch = useDispatch<TAppDispatch>()
   return useCallback((
-    offset: number, limit: number
-  ) => dispatch(fetchFarmsPending(offset, limit)), [dispatch])
+    account: string | undefined, offset: number, limit: number
+  ) => dispatch(fetchFarmsPending(account, offset, limit)), [dispatch])
+}
+
+export function useIncreaseFarmTokenAllowance(
+  // pass
+): (
+  accountAddr: string, tokenAddr:string,  amount: string, farmKey: number
+) => void {
+  const dispatch = useDispatch<TAppDispatch>()
+  return useCallback((
+    accountAddr: string, tokenAddr:string,  amount: string, farmKey: number
+  ) => dispatch(increaseFarmTokenAllowancePending(
+    accountAddr, tokenAddr, amount, farmKey
+  )), [dispatch])
 }
