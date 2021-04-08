@@ -5,7 +5,9 @@ import farmABI from "@abis/farm.json"
 import tokenABI from "@abis/token.json"
 import { 
   fetchFarmsCount,
-  fetchFarmInfo } from "@emmpair/meths/farm"
+  fetchFarmInfo,
+  fetchFarmUserInfo,
+  txDepositFarm } from "@emmpair/meths/farm"
 import { 
   fetchTokenName,
   fetchTokenAllowance,
@@ -20,6 +22,11 @@ import {
   increaseFarmTokenAllowanceReject,
   increaseFarmTokenAllowanceError,
   increaseFarmTokenAllowanceSuccess } from "@emmpair/actions/farm"
+import {
+  DepositFarmPendingAction,
+  depositFarmReject,
+  depositFarmError,
+  depositFarmSuccess } from "@emmpair/actions/farm"
 
 export function* fetchFarms(action: FetchFarmsPending) {
   const { account, offset, limit } = action.payload 
@@ -50,6 +57,8 @@ export function* fetchFarms(action: FetchFarmsPending) {
       new ethers.Contract(farm.lpToken, tokenABI, provider)
     ))
 
+    // TokenName
+    // ...
     const qbatch_names = tookens_contracts.map((contract) => (
       call(fetchTokenName, contract)
     ))
@@ -57,6 +66,8 @@ export function* fetchFarms(action: FetchFarmsPending) {
       ? yield all(qbatch_names)
       : []
 
+    // TokenAllowance
+    // ..
     const farms_allowance_batch = account 
       ? tookens_contracts.map((contract) => (
           call(fetchTokenAllowance, 
@@ -66,10 +77,24 @@ export function* fetchFarms(action: FetchFarmsPending) {
       ? yield all(farms_allowance_batch)
       : []
 
+    // userInfos
+    const farms_userInfos_batch = account 
+      ? farms.map((_farm, key) => (
+          call(fetchFarmUserInfo, 
+               farmContract, fix2Offset + key, account)))
+      : []
+    const farms_userInfos = farms_userInfos_batch.length > 0
+      ? yield all(farms_userInfos_batch)
+      : []
+
     const farmsMap = farms.map((farm, key) => ({
       pid: fix2Offset + key,
       name: farms_token_names[key],
+      // user
       allowance: farms_allowance.length > 0 ? farms_allowance[key].toString() : 0,
+      amount: farms_userInfos.length > 0 ? farms_userInfos[key].amount.toString() : 0,
+      rewardDebt: farms_userInfos.length > 0 ? farms_userInfos[key].rewardDebt.toString() : 0,
+      // ..
       lpToken: farm.lpToken,
       depositFeeBP: farm.depositFeeBP,
       accPROPPerShare: farm.accPROPPerShare.toString(),
@@ -92,11 +117,7 @@ export function* fetchFarms(action: FetchFarmsPending) {
 export function* increaseAllowanceTokenFarm(
   action: IncreaseFarmTokenAllowancePendingAction
 ) {
-  const { 
-    accountAddr,
-    tokenAddr,
-    amount,
-    farmKey } = action.payload 
+  const { accountAddr, tokenAddr, amount, farmKey } = action.payload 
   try {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const tokenContract = new ethers.Contract(tokenAddr, tokenABI, provider)
@@ -123,6 +144,47 @@ export function* increaseAllowanceTokenFarm(
       yield put(increaseFarmTokenAllowanceReject())
     } else {
       yield put(increaseFarmTokenAllowanceError())
+    }
+  }
+}
+
+
+export function* depositFarm(
+  action: DepositFarmPendingAction
+) {
+  const { accountAddr, tokenAddr, amount, farmPid, farmKey } = action.payload 
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const farmContract = new ethers.Contract(APP_FARM_CONTRACT_ADDRESS,
+                                             farmABI, provider)
+    const tokenContract = new ethers.Contract(tokenAddr,
+                                              tokenABI, provider)
+    const signer = window.ethers?.getSigner()
+    const farmContractWithSigner = farmContract.connect(signer)    
+        
+    yield call(txDepositFarm, farmContractWithSigner, farmPid, amount)
+    const allowance = yield call(fetchTokenAllowance,
+                                 tokenContract,
+                                 accountAddr,
+                                 APP_FARM_CONTRACT_ADDRESS)
+    const userInfo =  yield call(fetchFarmUserInfo, 
+                                 farmContract,
+                                 farmPid,
+                                 accountAddr)
+    yield put(depositFarmSuccess(
+      allowance.toString(),
+      userInfo.amount.toString(),
+      userInfo.rewardDebt.toString(),      
+      farmKey
+    ))
+  } catch (error) {
+    console.log(error.message)
+    if (error.code == 4001){
+      yield put(depositFarmReject())      
+    } else if (error.code == -32000 ){
+      yield put(depositFarmReject())
+    } else {
+      yield put(depositFarmError())
     }
   }
 }

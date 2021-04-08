@@ -5,9 +5,8 @@ import { TAppDispatch } from "@emmpair/types";
 import { collateralPending, withdrawPending } from "@emmpair/actions/deposit";
 import { mintPending, approveBurnPending, burnPending } from "@emmpair/actions/token";
 import { fetchFarmsPending, 
-         increaseFarmTokenAllowancePending } from "@emmpair/actions/farm"
-
-
+         increaseFarmTokenAllowancePending,
+         depositFarmPending } from "@emmpair/actions/farm"
 
 // deposit
 // =======
@@ -94,5 +93,18 @@ export function useIncreaseFarmTokenAllowance(
     accountAddr: string, tokenAddr:string,  amount: string, farmKey: number
   ) => dispatch(increaseFarmTokenAllowancePending(
     accountAddr, tokenAddr, amount, farmKey
+  )), [dispatch])
+}
+
+export function useDepositFarm(
+  // pass
+): (
+  accountAddr: string, tokenAddr:string, amount: string, farmPid: number, farmKey: number
+) => void {
+  const dispatch = useDispatch<TAppDispatch>()
+  return useCallback((
+    accountAddr: string, tokenAddr:string, amount: string, farmPid: number, farmKey: number
+  ) => dispatch(depositFarmPending(
+    accountAddr, tokenAddr, amount, farmPid, farmKey
   )), [dispatch])
 }

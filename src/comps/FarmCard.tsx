@@ -131,8 +131,8 @@ const OrangeColorButton = withStyles((theme: Theme) => ({
 
 type State = {
   approveAmount: string
+  depositAmount: string
 }
-
 
 interface IFarmCard {
   farm: TFarm
@@ -140,10 +140,12 @@ interface IFarmCard {
   disabled: boolean
   handleApprove: (
     event: React.MouseEvent<HTMLButtonElement>,
-    token: string,
-    amount: string,
-    farmKey: number,    
-  )=>void
+    token: string, amount: string, farmKey: number,
+  ) => void
+  handleDeposit: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    token: string, amount: string, farmPid: number, farmKey: number,
+  ) => void
 }
 
 const FarmCard: React.FC<IFarmCard> = (props) => {
@@ -151,9 +153,11 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
     farm,
     farmKey,
     disabled,
-    handleApprove } = props
+    handleApprove,
+    handleDeposit } = props
   const [values, setValues] = useState<State>({
     approveAmount: "",
+    depositAmount: "",
   })  
   const classes = useStyles()
 
@@ -165,114 +169,125 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
 
   return (
     <>
-      <Card className={classes.card}>
-        <CardContent className={classes.cardContent}>
-          <div className={classes.icon}>
-            <Warehouses fontSize="inherit" viewBox="0 0 44 44"/>
-          </div>
-          <div>
-            <Typography 
-              className={classes.sectionTitle}
+    <Card className={classes.card}>
+      <CardContent className={classes.cardContent}>
+        <div className={classes.icon}>
+          <Warehouses fontSize="inherit" viewBox="0 0 44 44"/>
+        </div>
+        <div>
+          <Typography 
+            className={classes.sectionTitle}
+            color="primary"
+          >
+            {farm.name}
+          </Typography>
+          <Typography 
+            className={classes.sectionDescription}
+          >
+            <b>depositFeeBP: </b>{farm.depositFeeBP}
+            <br/>
+            <b>Allowance: </b>{farm.allowance ? farm.allowance : "..."}
+            <br/>
+            <b>Amount: </b>{farm.amount ? farm.amount : "..."}
+            <br/>
+            <b>RewardDebt: </b>{farm.rewardDebt ? farm.rewardDebt : "..."}              
+          </Typography>
+          <div className={classes.actionRoot}>
+            <div className={classes.actionFormControl}>
+              <OutlinedInput
+                type="numberformat"
+                value={values.approveAmount}
+                onChange={handleChange('approveAmount')}
+                endAdornment={
+                  <InputAdornment position="end">
+                    Token
+                  </InputAdornment>
+                }
+                labelWidth={70}
+                inputComponent={NumberFormatToken as any}
+                margin="dense"
+              />
+              <GreenColorButton
+                color="primary"
+                variant="contained"
+                type="submit"
+                onClick={(event) => handleApprove(
+                  event, 
+                  farm.lpToken,
+                  values.approveAmount,
+                  farmKey,
+                )}
+                disabled={disabled}
+              >
+                Approve
+              </GreenColorButton>
+            </div>            
+            <div className={classes.actionFormControl}>
+              <OutlinedInput
+                type="numberformat"
+                value={values.depositAmount}
+                onChange={handleChange('depositAmount')}
+                endAdornment={
+                  <InputAdornment position="end">
+                    Token
+                  </InputAdornment>
+                }
+                labelWidth={70}
+                inputComponent={NumberFormatToken as any}
+                margin="dense"
+              />
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                onClick={(event) => handleDeposit(
+                  event,
+                  farm.lpToken,
+                  values.depositAmount,
+                  farm.pid,
+                  farmKey,
+                )}                  
+                disabled={disabled}
+              >
+                Deposit
+              </Button>
+            </div>
+            <OrangeColorButton
+              className={classes.actionBotton}
               color="primary"
+              variant="contained"
+              type="submit"
+              disabled={disabled}
             >
-              {farm.name}
-            </Typography>
-            <Typography 
-              className={classes.sectionDescription}
-            >
-              <b>depositFeeBP: </b>{farm.depositFeeBP}
-              <br/>
-              <b>Allowance: </b>{farm.allowance ? farm.allowance : "..."}
-            </Typography>
-            <div className={classes.actionRoot}>
-              <div className={classes.actionFormControl}>
-                <OutlinedInput
-                  type="numberformat"
-                  value={values.approveAmount}
-                  onChange={handleChange('approveAmount')}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      Token
-                    </InputAdornment>
-                  }
-                  labelWidth={70}
-                  inputComponent={NumberFormatToken as any}
-                  margin="dense"
-                />
-                <GreenColorButton
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                  onClick={(event) => handleApprove(
-                    event, 
-                    farm.lpToken, 
-                    values.approveAmount,
-                    farmKey,
-                  )}
-                  disabled={disabled}
-                >
-                  Approve
-                </GreenColorButton>
-              </div>            
-              <div className={classes.actionFormControl}>
-                <OutlinedInput
-                  type="numberformat"
-                  value={""}
-                  onChange={()=>{}}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      Token
-                    </InputAdornment>
-                  }
-                  labelWidth={70}
-                  inputComponent={NumberFormatToken as any}
-                  margin="dense"
-                />
-                <Button
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                  disabled={disabled}
-                >
-                  Deposit
-                </Button>
-              </div>
-              <OrangeColorButton
-                className={classes.actionBotton}
+              Harverst
+            </OrangeColorButton>
+            <div className={classes.actionFormControl}>
+              <OutlinedInput
+                type="numberformat"
+                value={""}
+                onChange={()=>{}}
+                endAdornment={
+                  <InputAdornment position="end">
+                    Token
+                  </InputAdornment>
+                }
+                labelWidth={70}
+                inputComponent={NumberFormatToken as any}
+                margin="dense"
+              />
+              <Button
                 color="primary"
                 variant="contained"
                 type="submit"
                 disabled={disabled}
               >
-                Harverst
-              </OrangeColorButton>
-              <div className={classes.actionFormControl}>
-                <OutlinedInput
-                  type="numberformat"
-                  value={""}
-                  onChange={()=>{}}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      Token
-                    </InputAdornment>
-                  }
-                  labelWidth={70}
-                  inputComponent={NumberFormatToken as any}
-                  margin="dense"
-                />
-                <Button
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                  disabled={disabled}
-                >
-                  Withdraw
-                </Button>
-              </div>
+                Withdraw
+              </Button>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </CardContent>
+    </Card>
     </>
   )
 }

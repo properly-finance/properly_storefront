@@ -8,10 +8,10 @@ import { ConnectedRouter } from 'connected-react-router'
 import store, { history } from "./store"
 import ThemeProvider from "./comps/ThemeProvider"
 import NotFound from "./comps/NotFound"
-import LayoutSection from "./sections/LayoutSection"
+import LayoutSection from "./comps/LayoutSection"
 import SectionRoute from "./comps/SectionRoute"
-import DepositSection from "./sections/DepositSection"
-import FarmSection from "./sections/FarmSection"
+import DepositSection from "./comps/DepositSection"
+import FarmSection from "./comps/FarmSection"
 
 function App():JSX.Element {
   return (

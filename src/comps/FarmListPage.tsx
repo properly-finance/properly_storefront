@@ -16,7 +16,8 @@ const FarmListPage: React.FC = () => {
   const { location:{ pathname }} = pollRouter()
   const { farms, limit, offset,
           txFetchFarmsStatus,
-          txIncreaseFarmTokenAllowanceStatus } = pollFarm()
+          txIncreaseFarmTokenAllowanceStatus,
+          txDepositFarmStatus } = pollFarm()
   const { account } = pollWallet()  
   const fetchFarms = useFetchFarms()
 
@@ -32,6 +33,7 @@ const FarmListPage: React.FC = () => {
         account={account}
         txFetchFarmsStatus={txFetchFarmsStatus}
         txIncreaseFarmTokenAllowanceStatus={txIncreaseFarmTokenAllowanceStatus}
+        txDepositFarmStatus={txDepositFarmStatus}
       /> 
     </div>
   )

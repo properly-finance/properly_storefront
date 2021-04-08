@@ -1,7 +1,7 @@
 import React from "react"
 import { Route, Switch } from "react-router-dom"
 import WindowTitle from "@emmpair/comps/WindowTitle"
-import FarmListPage from  "@emmpair/conts/FarmListPage"
+import FarmListPage from  "@emmpair/comps/FarmListPage"
 
 const FarmSection: React.FC = () => {
   return (

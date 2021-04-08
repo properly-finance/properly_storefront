@@ -45,3 +45,25 @@ export type IncreaseFarmTokenAllowancePendingAction = ReturnType<typeof increase
 export type IncreaseFarmTokenAllowanceRejectAction = ReturnType<typeof increaseFarmTokenAllowanceReject>
 export type IncreaseFarmTokenAllowanceErrorAction = ReturnType<typeof increaseFarmTokenAllowanceError>
 export type IncreaseFarmTokenAllowanceSuccessAction = ReturnType<typeof increaseFarmTokenAllowanceSuccess>
+
+
+export const DEPOSIT_FARM_PENDING = '[pending] deposit/farm'
+export const DEPOSIT_FARM_REJECT = '[reject] deposit/farm'
+export const DEPOSIT_FARM_ERROR = '[error] deposit/farm'
+export const DEPOSIT_FARM_SUCCESS = '[success] deposit/farm'
+export const depositFarmPending = ( 
+  accountAddr: string, tokenAddr:string, amount: string, farmPid: number, farmKey: number
+) => action(DEPOSIT_FARM_PENDING, { 
+  accountAddr, tokenAddr, amount, farmPid, farmKey
+})
+export const depositFarmReject = () => action(DEPOSIT_FARM_REJECT, {})
+export const depositFarmError = () => action(DEPOSIT_FARM_ERROR, {})
+export const depositFarmSuccess = ( 
+  allowance: string, amount: string, rewardDebt: string, farmKey: number
+) => action(DEPOSIT_FARM_SUCCESS, { 
+  allowance, amount, rewardDebt, farmKey
+})
+export type DepositFarmPendingAction = ReturnType<typeof depositFarmPending>
+export type DepositFarmRejectAction = ReturnType<typeof depositFarmReject>
+export type DepositFarmErrorAction = ReturnType<typeof depositFarmError>
+export type DepositFarmSuccessAction = ReturnType<typeof depositFarmSuccess>

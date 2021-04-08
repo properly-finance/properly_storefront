@@ -27,6 +27,9 @@ export type TFarm = {
   pid: number
   name: string
   allowance: string
+  amount: string
+  rewardDebt: string  
+  // ..
   lpToken: string
   depositFeeBP: number
   accPROPPerShare: string
@@ -39,6 +42,7 @@ export type TFarms = [TFarm]
 export type TFarmState = {
   txFetchFarmsStatus: string
   txIncreaseFarmTokenAllowanceStatus: string
+  txDepositFarmStatus: string  
   farms: [] | TFarms
   limit: number
   offset: number
