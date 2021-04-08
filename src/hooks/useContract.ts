@@ -6,11 +6,11 @@ import { collateralPending, withdrawPending } from "@emmpair/actions/deposit";
 import { mintPending, approveBurnPending, burnPending } from "@emmpair/actions/token";
 import { fetchFarmsPending, 
          increaseFarmTokenAllowancePending,
-         depositFarmPending } from "@emmpair/actions/farm"
+         depositFarmPending,
+         withdrawFarmPending } from "@emmpair/actions/farm"
 
 // deposit
 // =======
-
 export function pollDeposit(): TDepositState {
   return useSelector((state: TAppState) => state.deposit)
 }
@@ -35,7 +35,6 @@ export function useWithdrawDeposit(
 
 // token
 // =====
-
 export function pollToken(): TTokenState {
   return useSelector((state: TAppState) => state.token)
 }
@@ -69,7 +68,6 @@ export function useBurnAsset(
 
 // farm
 // ====
-
 export function pollFarm(): TFarmState {
   return useSelector((state: TAppState) => state.farm)
 }
@@ -105,6 +103,19 @@ export function useDepositFarm(
   return useCallback((
     accountAddr: string, tokenAddr:string, amount: string, farmPid: number, farmKey: number
   ) => dispatch(depositFarmPending(
+    accountAddr, tokenAddr, amount, farmPid, farmKey
+  )), [dispatch])
+}
+
+export function useWithdrawFarm(
+  // pass
+): (
+  accountAddr: string, tokenAddr:string, amount: string, farmPid: number, farmKey: number
+) => void {
+  const dispatch = useDispatch<TAppDispatch>()
+  return useCallback((
+    accountAddr: string, tokenAddr:string, amount: string, farmPid: number, farmKey: number
+  ) => dispatch(withdrawFarmPending(
     accountAddr, tokenAddr, amount, farmPid, farmKey
   )), [dispatch])
 }

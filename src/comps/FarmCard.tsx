@@ -130,8 +130,8 @@ const OrangeColorButton = withStyles((theme: Theme) => ({
 // }))(Button)
 
 type State = {
-  approveAmount: string
   depositAmount: string
+  withdrawAmount: string
 }
 
 interface IFarmCard {
@@ -140,9 +140,17 @@ interface IFarmCard {
   disabled: boolean
   handleApprove: (
     event: React.MouseEvent<HTMLButtonElement>,
-    token: string, amount: string, farmKey: number,
+    token: string, farmKey: number,
   ) => void
   handleDeposit: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    token: string, amount: string, farmPid: number, farmKey: number,
+  ) => void
+  handleHarverst: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    token: string, farmPid: number, farmKey: number,
+  ) => void
+  handleWithdraw: (
     event: React.MouseEvent<HTMLButtonElement>,
     token: string, amount: string, farmPid: number, farmKey: number,
   ) => void
@@ -154,10 +162,12 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
     farmKey,
     disabled,
     handleApprove,
-    handleDeposit } = props
+    handleDeposit,
+    handleHarverst,
+    handleWithdraw } = props
   const [values, setValues] = useState<State>({
-    approveAmount: "",
     depositAmount: "",
+    withdrawAmount: "",
   })  
   const classes = useStyles()
 
@@ -186,42 +196,32 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
           >
             <b>depositFeeBP: </b>{farm.depositFeeBP}
             <br/>
-            <b>Allowance: </b>{farm.allowance ? farm.allowance : "..."}
+            <b>Allowance: </b>
+            {farm.allowance 
+              ? farm.allowance.length > 20 
+                  ? farm.allowance.substring(0, 20 - 3) + "..." 
+                  : farm.allowance
+              : "..."
+            }
             <br/>
             <b>Amount: </b>{farm.amount ? farm.amount : "..."}
             <br/>
             <b>RewardDebt: </b>{farm.rewardDebt ? farm.rewardDebt : "..."}              
           </Typography>
           <div className={classes.actionRoot}>
-            <div className={classes.actionFormControl}>
-              <OutlinedInput
-                type="numberformat"
-                value={values.approveAmount}
-                onChange={handleChange('approveAmount')}
-                endAdornment={
-                  <InputAdornment position="end">
-                    Token
-                  </InputAdornment>
-                }
-                labelWidth={70}
-                inputComponent={NumberFormatToken as any}
-                margin="dense"
-              />
-              <GreenColorButton
-                color="primary"
-                variant="contained"
-                type="submit"
-                onClick={(event) => handleApprove(
-                  event, 
-                  farm.lpToken,
-                  values.approveAmount,
-                  farmKey,
-                )}
-                disabled={disabled}
-              >
-                Approve
-              </GreenColorButton>
-            </div>            
+            <GreenColorButton
+              color="primary"
+              variant="contained"
+              type="submit"
+              onClick={(event) => handleApprove(
+                event, 
+                farm.lpToken,
+                farmKey,
+              )}
+              disabled={disabled}
+            >
+              Increase Allowance
+            </GreenColorButton>
             <div className={classes.actionFormControl}>
               <OutlinedInput
                 type="numberformat"
@@ -246,7 +246,7 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
                   values.depositAmount,
                   farm.pid,
                   farmKey,
-                )}                  
+                )}
                 disabled={disabled}
               >
                 Deposit
@@ -257,6 +257,12 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
               color="primary"
               variant="contained"
               type="submit"
+              onClick={(event) => handleHarverst(
+                event,
+                farm.lpToken,
+                farm.pid,
+                farmKey,
+              )}
               disabled={disabled}
             >
               Harverst
@@ -264,8 +270,8 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
             <div className={classes.actionFormControl}>
               <OutlinedInput
                 type="numberformat"
-                value={""}
-                onChange={()=>{}}
+                value={values.withdrawAmount}
+                onChange={handleChange('withdrawAmount')}
                 endAdornment={
                   <InputAdornment position="end">
                     Token
@@ -279,6 +285,13 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
                 color="primary"
                 variant="contained"
                 type="submit"
+                onClick={(event) => handleWithdraw(
+                  event,
+                  farm.lpToken,
+                  values.withdrawAmount,
+                  farm.pid,
+                  farmKey,
+                )}
                 disabled={disabled}
               >
                 Withdraw

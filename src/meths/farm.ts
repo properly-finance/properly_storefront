@@ -17,3 +17,11 @@ export async function txDepositFarm(
   const txInfo = await tx.wait()
   return [tx, txInfo]
 }
+
+export async function txWithdrawFarm(
+  farmContract, pid: number, amount: string,
+) {
+  const tx = await farmContract.withdraw(pid, amount)
+  const txInfo = await tx.wait()
+  return [tx, txInfo]
+}

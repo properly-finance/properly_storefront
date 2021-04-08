@@ -7,10 +7,12 @@ import { MINT_PENDING, BURN_PENDING, APPROVE_BURN_PENDING } from "@emmpair/actio
 import { mintToken, burnToken, approveBurnToken } from "./token"
 import { FETCH_FARMS_PENDING,
          INCREASE_FARM_TOKEN_ALLOWANCE_PENDING,
-         DEPOSIT_FARM_PENDING } from "@emmpair/actions/farm"
+         DEPOSIT_FARM_PENDING,
+         WITHDRAW_FARM_PENDING } from "@emmpair/actions/farm"
 import { fetchFarms,
          increaseAllowanceTokenFarm,
-         depositFarm } from "./farm"
+         depositFarm,
+         withdrawFarm } from "./farm"
 
 function* rootSaga() {
   yield all([
@@ -23,6 +25,7 @@ function* rootSaga() {
     takeEvery(FETCH_FARMS_PENDING, fetchFarms),
     takeEvery(INCREASE_FARM_TOKEN_ALLOWANCE_PENDING, increaseAllowanceTokenFarm),
     takeEvery(DEPOSIT_FARM_PENDING, depositFarm),
+    takeEvery(WITHDRAW_FARM_PENDING, withdrawFarm),    
   ])
 }
 

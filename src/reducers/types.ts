@@ -42,7 +42,8 @@ export type TFarms = [TFarm]
 export type TFarmState = {
   txFetchFarmsStatus: string
   txIncreaseFarmTokenAllowanceStatus: string
-  txDepositFarmStatus: string  
+  txDepositFarmStatus: string
+  txWithdrawFarmStatus: string  
   farms: [] | TFarms
   limit: number
   offset: number

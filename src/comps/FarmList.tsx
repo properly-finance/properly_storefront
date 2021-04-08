@@ -2,9 +2,9 @@ import React from "react"
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { TFarms } from "@emmpair/reducers/types"
 import FarmCard from "./FarmCard"
-import {
-  useIncreaseFarmTokenAllowance,
-  useDepositFarm } from "@emmpair/hooks/useContract"
+import { useIncreaseFarmTokenAllowance,
+         useDepositFarm,
+         useWithdrawFarm } from "@emmpair/hooks/useContract"
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -25,6 +25,7 @@ interface IFarmList {
   txFetchFarmsStatus: string
   txIncreaseFarmTokenAllowanceStatus: string
   txDepositFarmStatus: string
+  txWithdrawFarmStatus: string
 }
 
 const FarmList: React.FC<IFarmList> = (props) => {
@@ -33,17 +34,19 @@ const FarmList: React.FC<IFarmList> = (props) => {
     account,
     txFetchFarmsStatus,
     txIncreaseFarmTokenAllowanceStatus,
-    txDepositFarmStatus } = props
+    txDepositFarmStatus,
+    txWithdrawFarmStatus } = props
   const classes = useStyles()
   const increaseAllowance = useIncreaseFarmTokenAllowance()
   const deposit = useDepositFarm()
+  const withdraw = useWithdrawFarm()
 
   function handleApprove(
     event: React.MouseEvent<HTMLButtonElement>,
-    token: string, amount: string, farmKey: number,
+    token: string, farmKey: number,
   ){
     event.preventDefault()
-    increaseAllowance(account, token, amount, farmKey)
+    increaseAllowance(account, token, "99999999999999999999999", farmKey)
   }
 
   function handleDeposit(
@@ -52,6 +55,22 @@ const FarmList: React.FC<IFarmList> = (props) => {
   ){
     event.preventDefault()
     deposit(account, token, amount, farmPid, farmKey)
+  }
+
+  function handleHarverst(
+    event: React.MouseEvent<HTMLButtonElement>,
+    token: string, farmPid: number, farmKey: number,
+  ){
+    event.preventDefault()
+    deposit(account, token, "0", farmPid, farmKey)
+  }
+
+  function handleWithdraw(
+    event: React.MouseEvent<HTMLButtonElement>,
+    token: string, amount: string, farmPid: number, farmKey: number,
+  ){
+    event.preventDefault()
+    withdraw(account, token, amount, farmPid, farmKey)
   }
 
   return (
@@ -67,9 +86,12 @@ const FarmList: React.FC<IFarmList> = (props) => {
                 || txFetchFarmsStatus == 'pending'
                 || txIncreaseFarmTokenAllowanceStatus == 'pending'
                 || txDepositFarmStatus == 'pending'
+                || txWithdrawFarmStatus == 'pending'
               }
               handleApprove={handleApprove}
               handleDeposit={handleDeposit}
+              handleHarverst={handleHarverst}
+              handleWithdraw={handleWithdraw}
             />
           ))}
         </div>

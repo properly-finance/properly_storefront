@@ -17,7 +17,8 @@ const FarmListPage: React.FC = () => {
   const { farms, limit, offset,
           txFetchFarmsStatus,
           txIncreaseFarmTokenAllowanceStatus,
-          txDepositFarmStatus } = pollFarm()
+          txDepositFarmStatus,
+          txWithdrawFarmStatus } = pollFarm()
   const { account } = pollWallet()  
   const fetchFarms = useFetchFarms()
 
@@ -34,6 +35,7 @@ const FarmListPage: React.FC = () => {
         txFetchFarmsStatus={txFetchFarmsStatus}
         txIncreaseFarmTokenAllowanceStatus={txIncreaseFarmTokenAllowanceStatus}
         txDepositFarmStatus={txDepositFarmStatus}
+        txWithdrawFarmStatus={txWithdrawFarmStatus}
       /> 
     </div>
   )

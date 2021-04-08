@@ -7,7 +7,8 @@ import {
   fetchFarmsCount,
   fetchFarmInfo,
   fetchFarmUserInfo,
-  txDepositFarm } from "@emmpair/meths/farm"
+  txDepositFarm,
+  txWithdrawFarm } from "@emmpair/meths/farm"
 import { 
   fetchTokenName,
   fetchTokenAllowance,
@@ -27,6 +28,11 @@ import {
   depositFarmReject,
   depositFarmError,
   depositFarmSuccess } from "@emmpair/actions/farm"
+import {
+  WithdrawFarmPendingAction,
+  withdrawFarmReject,
+  withdrawFarmError,
+  withdrawFarmSuccess } from "@emmpair/actions/farm"  
 
 export function* fetchFarms(action: FetchFarmsPending) {
   const { account, offset, limit } = action.payload 
@@ -148,7 +154,6 @@ export function* increaseAllowanceTokenFarm(
   }
 }
 
-
 export function* depositFarm(
   action: DepositFarmPendingAction
 ) {
@@ -185,6 +190,46 @@ export function* depositFarm(
       yield put(depositFarmReject())
     } else {
       yield put(depositFarmError())
+    }
+  }
+}
+
+export function* withdrawFarm(
+  action: WithdrawFarmPendingAction
+) {
+  const { accountAddr, tokenAddr, amount, farmPid, farmKey } = action.payload 
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const farmContract = new ethers.Contract(APP_FARM_CONTRACT_ADDRESS,
+                                             farmABI, provider)
+    const tokenContract = new ethers.Contract(tokenAddr,
+                                              tokenABI, provider)
+    const signer = window.ethers?.getSigner()
+    const farmContractWithSigner = farmContract.connect(signer)    
+        
+    yield call(txWithdrawFarm, farmContractWithSigner, farmPid, amount)
+    const allowance = yield call(fetchTokenAllowance,
+                                 tokenContract,
+                                 accountAddr,
+                                 APP_FARM_CONTRACT_ADDRESS)
+    const userInfo =  yield call(fetchFarmUserInfo, 
+                                 farmContract,
+                                 farmPid,
+                                 accountAddr)
+    yield put(withdrawFarmSuccess(
+      allowance.toString(),
+      userInfo.amount.toString(),
+      userInfo.rewardDebt.toString(),      
+      farmKey
+    ))
+  } catch (error) {
+    console.log(error.message)
+    if (error.code == 4001){
+      yield put(withdrawFarmReject())      
+    } else if (error.code == -32000 ){
+      yield put(withdrawFarmReject())
+    } else {
+      yield put(withdrawFarmError())
     }
   }
 }

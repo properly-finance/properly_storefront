@@ -18,11 +18,18 @@ import {
   DEPOSIT_FARM_ERROR,
   DEPOSIT_FARM_SUCCESS,
   DepositFarmSuccessAction } from "@emmpair/actions/farm"
+import {
+  WITHDRAW_FARM_PENDING,
+  WITHDRAW_FARM_REJECT,
+  WITHDRAW_FARM_ERROR,
+  WITHDRAW_FARM_SUCCESS, 
+  WithdrawFarmSuccessAction }from "@emmpair/actions/farm"
 
 const initialState: TFarmState = {
   txFetchFarmsStatus: 'idle',
   txIncreaseFarmTokenAllowanceStatus: 'idle',
   txDepositFarmStatus: 'idle',
+  txWithdrawFarmStatus: 'idle',
   farms:[],
   limit: 10,
   offset: 0,
@@ -128,6 +135,40 @@ const farmReducer = createReducer(initialState, (builder) => {
     state.farms[farmKey].rewardDebt = rewardDebt
     if (txDepositFarmStatus === 'pending') {
       state.txDepositFarmStatus = 'idle'
+    }
+  })
+
+  // txWithdrawFarm
+  // ...
+  .addCase(WITHDRAW_FARM_PENDING, (state: TFarmState) => {
+    const { txWithdrawFarmStatus } = state
+    if (['idle', 'reject', 'error'].includes(txWithdrawFarmStatus) ) {
+      state.txWithdrawFarmStatus = 'pending'
+    }
+  })
+  .addCase(WITHDRAW_FARM_REJECT, (state: TFarmState) => {
+    const { txWithdrawFarmStatus } = state
+    if (txWithdrawFarmStatus === 'pending') {
+      state.txWithdrawFarmStatus = 'reject'
+    }
+  })
+  .addCase(WITHDRAW_FARM_ERROR, (state: TFarmState) => {
+    const { txWithdrawFarmStatus } = state
+    if (txWithdrawFarmStatus === 'pending') {
+      state.txWithdrawFarmStatus = 'error'
+    }
+  })
+  .addCase(WITHDRAW_FARM_SUCCESS, (
+    state: TFarmState,
+    action: WithdrawFarmSuccessAction
+  ) => {
+    const { txWithdrawFarmStatus } = state
+    const { allowance, amount, rewardDebt, farmKey } = action.payload
+    state.farms[farmKey].allowance = allowance
+    state.farms[farmKey].amount = amount
+    state.farms[farmKey].rewardDebt = rewardDebt
+    if (txWithdrawFarmStatus === 'pending') {
+      state.txWithdrawFarmStatus = 'idle'
     }
   })
 
