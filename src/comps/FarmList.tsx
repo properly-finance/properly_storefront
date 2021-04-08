@@ -1,37 +1,13 @@
 import React from "react"
-import Card from "@material-ui/core/Card"
-import CardContent from "@material-ui/core/CardContent"
-import Typography from "@material-ui/core/Typography"
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { TFarms } from "@emmpair/reducers/types"
-import Warehouses from "@emmpair/icons/Warehouses"
-
+import FarmCard from "./FarmCard"
+import { useIncreaseFarmTokenAllowance,
+         useDepositFarm,
+         useWithdrawFarm } from "@emmpair/hooks/useContract"
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-  },
-  card: {
-    "&:hover": {
-      boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.15);"
-    },
-    cursor: "pointer",
-    marginBottom: theme.spacing(3),
-    transition: theme.transitions.duration.standard + "ms"
-  },
-  cardContent: {
-    // Overrides Material-UI default theme
-    "&:last-child": {
-      paddingBottom: 16
-    },
-    display: "grid",
-    gridColumnGap: theme.spacing(4),
-    gridTemplateColumns: "48px 1fr"
-  },
-  cardDisabled: {
-    "& $icon, & $sectionTitle, & $sectionDescription": {
-      color: theme.palette.text.disabled
-    },
-    marginBottom: theme.spacing(3)
   },
   configurationItem: {
     [theme.breakpoints.down("md")]: {
@@ -41,71 +17,82 @@ const useStyles = makeStyles((theme: Theme) => ({
     gridColumnGap: theme.spacing(4),
     gridTemplateColumns: "1fr 1fr"
   },
-  icon: {
-    "& path": {
-      fill: theme.palette.primary.main
-    },
-    fontSize: 48
-  },
-  sectionDescription: {
-
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 600 as 600
-  }
 }),{ name: "FarmList" })
 
 interface IFarmList {
   farms: [] | TFarms
   account?: string
-  navigate: (path: string)=>void
+  txFetchFarmsStatus: string
+  txIncreaseFarmTokenAllowanceStatus: string
+  txDepositFarmStatus: string
+  txWithdrawFarmStatus: string
 }
 
 const FarmList: React.FC<IFarmList> = (props) => {
-  const { farms, account, navigate } = props
+  const { 
+    farms,
+    account,
+    txFetchFarmsStatus,
+    txIncreaseFarmTokenAllowanceStatus,
+    txDepositFarmStatus,
+    txWithdrawFarmStatus } = props
   const classes = useStyles()
+  const increaseAllowance = useIncreaseFarmTokenAllowance()
+  const deposit = useDepositFarm()
+  const withdraw = useWithdrawFarm()
 
-  function handleNavigate(event, url: string){
-    event.preventDefault()    
-    if (account){
-      navigate(url)
-    }
+  function handleApprove(
+    event: React.MouseEvent<HTMLButtonElement>,
+    token: string, farmKey: number,
+  ){
+    event.preventDefault()
+    increaseAllowance(account, token, "99999999999999999999999", farmKey)
   }
-  // const handleNavigate = (url: string) => {
-  //   console.log(url)    
-  // }
+
+  function handleDeposit(
+    event: React.MouseEvent<HTMLButtonElement>,
+    token: string, amount: string, farmPid: number, farmKey: number,
+  ){
+    event.preventDefault()
+    deposit(account, token, amount, farmPid, farmKey)
+  }
+
+  function handleHarverst(
+    event: React.MouseEvent<HTMLButtonElement>,
+    token: string, farmPid: number, farmKey: number,
+  ){
+    event.preventDefault()
+    deposit(account, token, "0", farmPid, farmKey)
+  }
+
+  function handleWithdraw(
+    event: React.MouseEvent<HTMLButtonElement>,
+    token: string, amount: string, farmPid: number, farmKey: number,
+  ){
+    event.preventDefault()
+    withdraw(account, token, amount, farmPid, farmKey)
+  }
 
   return (
     <div className={classes.root}>
       { farms.length ? (
         <div className={classes.configurationItem}>
-          {farms.map((farm, farmKey) => (
-            <Card
-              className={account
-                ? classes.card
-                : classes.cardDisabled
+          {farms.map((farm, key) => (
+            <FarmCard 
+              key={key}
+              farm={farm}
+              farmKey={key}
+              disabled={!account
+                || txFetchFarmsStatus == 'pending'
+                || txIncreaseFarmTokenAllowanceStatus == 'pending'
+                || txDepositFarmStatus == 'pending'
+                || txWithdrawFarmStatus == 'pending'
               }
-              onClick={(e)=>handleNavigate(e, `/farm/${farm.lpToken}`)}
-              key={farmKey}
-            >
-              <CardContent className={classes.cardContent}>
-                <div className={classes.icon}>
-                  <Warehouses fontSize="inherit" viewBox="0 0 44 44" />
-                </div>
-                <div>
-                  <Typography
-                    className={classes.sectionTitle}
-                    color="primary"
-                  >
-                    {farm.name}
-                  </Typography>
-                  <Typography className={classes.sectionDescription}>
-                    depositFeeBP: {farm.depositFeeBP}
-                  </Typography>
-                </div>
-              </CardContent>
-            </Card>
+              handleApprove={handleApprove}
+              handleDeposit={handleDeposit}
+              handleHarverst={handleHarverst}
+              handleWithdraw={handleWithdraw}
+            />
           ))}
         </div>
       ) : (
