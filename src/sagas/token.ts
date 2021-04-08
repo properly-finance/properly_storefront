@@ -8,8 +8,8 @@ import { MintPendingAction, BurnPendingAction, ApproveBurnPendingAction,
 import { fetchCollateralBalance,
          fetchCollateralUsed,
          fetchBorrowLimit } from "@emmpair/meths/deposit"
-import { fetchTokenBalance, fetchTokenBurnBalance,
-         txMint, txBurn, txApproveBurn } from "@emmpair/meths/token"
+import { fetchTokenBalance, fetchTokenAllowance,
+         txMint, txBurn, txIncreaseTokenAllowance } from "@emmpair/meths/token"
 
 // function callStub(text){
 //   return new Promise<string>(resolve => {
@@ -71,7 +71,7 @@ export function* burnToken(action: BurnPendingAction) {
     const balance = yield call(fetchTokenBalance, 
                                window.tokenContract,
                                account)
-    const allowBurnBalance = yield call(fetchTokenBurnBalance,
+    const allowBurnBalance = yield call(fetchTokenAllowance,
                                    window.tokenContract,
                                    account,
                                    APP_DEPOSIT_CONTRACT_ADDRESS)
@@ -111,11 +111,11 @@ export function* approveBurnToken(action: ApproveBurnPendingAction) {
     const signer = window.ethers?.getSigner()
     const tokenContractWithSigner = window.tokenContract.connect(signer)    
         
-    yield call(txApproveBurn,
+    yield call(txIncreaseTokenAllowance,
                tokenContractWithSigner,
                APP_DEPOSIT_CONTRACT_ADDRESS,
                amount)
-    const balance = yield call(fetchTokenBurnBalance,
+    const balance = yield call(fetchTokenAllowance,
                                window.tokenContract,
                                account,
                                APP_DEPOSIT_CONTRACT_ADDRESS)

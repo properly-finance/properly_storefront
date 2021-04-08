@@ -166,7 +166,6 @@ export default function CollateralPane():JSX.Element {
           variant="contained"
           onClick={handleDeposit}
           type="submit"
-          data-test="submit"
           disabled={ txCollateralStatus == 'pending'
             || txWithdrawStatus == 'pending'
             || txMintStatus == 'pending'
@@ -208,7 +207,6 @@ export default function CollateralPane():JSX.Element {
           variant="contained"
           onClick={handleWithdraw}
           type="submit"
-          data-test="submit"
           disabled={ txCollateralStatus == 'pending' 
             || txWithdrawStatus == 'pending'
             || txMintStatus == 'pending'

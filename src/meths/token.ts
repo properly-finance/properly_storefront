@@ -9,12 +9,12 @@ export function fetchTokenBalance(
   return tokenContract.balanceOf(account)
 };
 
-export function fetchTokenBurnBalance(
+export function fetchTokenAllowance(
   tokenContract,
   accountAddr: string,
-  depositContractAddr: string
+  spenderContractAddr: string
 ){
-  return tokenContract.allowance(accountAddr, depositContractAddr)
+  return tokenContract.allowance(accountAddr, spenderContractAddr)
 };
 
 export async function txMint(
@@ -26,12 +26,12 @@ export async function txMint(
   return [tx, txInfo]
 }
 
-export async function txApproveBurn(
+export async function txIncreaseTokenAllowance(
   tokenContract,
-  depositContractAddr: string,
+  spenderContractAddr: string,
   amount: string
 ) {
-  const tx = await tokenContract.increaseAllowance(depositContractAddr, amount)
+  const tx = await tokenContract.increaseAllowance(spenderContractAddr, amount)
   const txInfo = await tx.wait()
   return [tx, txInfo]
 }
