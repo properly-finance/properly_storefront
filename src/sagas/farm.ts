@@ -11,6 +11,7 @@ import {
   txWithdrawFarm } from "@emmpair/meths/farm"
 import { 
   fetchTokenName,
+  fetchTokenBalance,
   fetchTokenAllowance,
   txIncreaseTokenAllowance } from "@emmpair/meths/token"
 import { 
@@ -83,6 +84,17 @@ export function* fetchFarms(action: FetchFarmsPending) {
       ? yield all(farms_allowance_batch)
       : []
 
+    // TokenTokenBalance
+    // ..
+    const farms_token_balance_batch = account 
+      ? tookens_contracts.map((contract) => (
+          call(fetchTokenBalance, 
+               contract, account)))
+      : []
+    const farms_token_balance = farms_token_balance_batch.length > 0
+      ? yield all(farms_token_balance_batch)
+      : []
+
     // userInfos
     const farms_userInfos_batch = account 
       ? farms.map((_farm, key) => (
@@ -97,6 +109,7 @@ export function* fetchFarms(action: FetchFarmsPending) {
       pid: fix2Offset + key,
       name: farms_token_names[key],
       // user
+      tokenBalance: farms_token_balance.length > 0 ? farms_token_balance[key].toString() : 0,
       allowance: farms_allowance.length > 0 ? farms_allowance[key].toString() : 0,
       amount: farms_userInfos.length > 0 ? farms_userInfos[key].amount.toString() : 0,
       rewardDebt: farms_userInfos.length > 0 ? farms_userInfos[key].rewardDebt.toString() : 0,

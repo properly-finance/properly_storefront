@@ -11,6 +11,11 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import NumberFormat from 'react-number-format'
 import { green, deepOrange } from '@material-ui/core/colors';
 
+import FormControl from '@material-ui/core/FormControl';
+// import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
+
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
   },
@@ -196,14 +201,6 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
           >
             <b>depositFeeBP: </b>{farm.depositFeeBP}
             <br/>
-            <b>Allowance: </b>
-            {farm.allowance 
-              ? farm.allowance.length > 20 
-                  ? farm.allowance.substring(0, 20 - 3) + "..." 
-                  : farm.allowance
-              : "..."
-            }
-            <br/>
             <b>Amount: </b>{farm.amount ? farm.amount : "..."}
             <br/>
             <b>RewardDebt: </b>{farm.rewardDebt ? farm.rewardDebt : "..."}              
@@ -220,22 +217,26 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
               )}
               disabled={disabled}
             >
-              Increase Allowance
+              Approve
             </GreenColorButton>
             <div className={classes.actionFormControl}>
-              <OutlinedInput
-                type="numberformat"
-                value={values.depositAmount}
-                onChange={handleChange('depositAmount')}
-                endAdornment={
-                  <InputAdornment position="end">
-                    Token
-                  </InputAdornment>
-                }
-                labelWidth={70}
-                inputComponent={NumberFormatToken as any}
-                margin="dense"
-              />
+              <FormControl variant="outlined">
+                <OutlinedInput
+                  type="numberformat"
+                  value={values.depositAmount}
+                  onChange={handleChange('depositAmount')}
+                  labelWidth={70}
+                  inputComponent={NumberFormatToken as any}
+                  margin="dense"
+                />
+                <FormHelperText>
+                  <b>
+                    {farm.tokenBalance 
+                      ? `Token Balance: ${farm.tokenBalance}` 
+                      : "..."}
+                  </b>
+                </FormHelperText>                
+              </FormControl>
               <Button
                 color="primary"
                 variant="contained"
@@ -247,7 +248,7 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
                   farm.pid,
                   farmKey,
                 )}
-                disabled={disabled}
+                disabled={disabled || Number(farm.allowance) == 0}
               >
                 Deposit
               </Button>

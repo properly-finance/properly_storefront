@@ -28,6 +28,7 @@ export type TTokenState = {
 export type TFarm = {
   pid: number
   name: string
+  tokenBalance: string
   allowance: string
   amount: string
   rewardDebt: string  
