@@ -7,9 +7,13 @@
 // }
 
 export function fetchNetwork(provider){
-  return provider.getNetwork();
-};
+  return provider.getNetwork()
+}
 
 export function fetchBalance(provider, account){
-  return provider.getBalance(account);
-};
+  return provider.getBalance(account)
+}
+
+export function fetchPriceTokenWallet(depositContract){
+    return depositContract.LandIndexPrice()
+}

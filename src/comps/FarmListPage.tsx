@@ -23,7 +23,6 @@ const FarmListPage: React.FC = () => {
   const fetchFarms = useFetchFarms()
 
   useEffect(() => {
-    // useFetchFarms(offset + limit, limit)
     fetchFarms(account, offset, limit)
   }, [ pathname, account ])
 

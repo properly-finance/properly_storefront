@@ -1,22 +1,32 @@
-import { call, put } from 'redux-saga/effects';
-import { ethers } from "ethers";
-import depositABI from "@abis/deposit.json";
-import tokenABI from "@abis/token.json";
-import { APP_DEPOSIT_CONTRACT_ADDRESS,
-         APP_TOKEN_CONTRACT_ADDRESS,
-         APP_FARM_CONTRACT_ADDRESS } from "@emmpair/config";
-import { fetchNetwork, fetchBalance } from "@emmpair/meths/wallet";
-import { fetchCollateralBalance,
-         fetchCollateralUsed,
-         fetchBorrowLimit } from "@emmpair/meths/deposit";
-import { collateralSuccess } from "@emmpair/actions/deposit";
-import { handshakeWalletError,
-         handshakeWalletReject,
-         handshakeWalletSuccess } from "@emmpair/actions/wallet";
-import { fetchTokenBalance,
-         fetchTokenAllowance } from "@emmpair/meths/token";
-import { updateTokenInfoRequest } from "@emmpair/actions/token";
-                  
+import { call, put } from 'redux-saga/effects'
+import { ethers } from "ethers"
+import depositABI from "@abis/deposit.json"
+import tokenABI from "@abis/token.json"
+import {
+  APP_DEPOSIT_CONTRACT_ADDRESS,
+  APP_TOKEN_CONTRACT_ADDRESS,
+  APP_FARM_CONTRACT_ADDRESS } from "@emmpair/config"
+import { 
+  fetchNetwork,
+  fetchBalance,
+  fetchPriceTokenWallet } from "@emmpair/meths/wallet"
+import {
+  fetchCollateralBalance,
+  fetchCollateralUsed,
+  fetchBorrowLimit } from "@emmpair/meths/deposit"
+import { collateralSuccess } from "@emmpair/actions/deposit"
+import {
+  fetchTokenBalance,
+  fetchTokenAllowance } from "@emmpair/meths/token"
+import { updateTokenInfoRequest } from "@emmpair/actions/token"
+import { 
+  handshakeWalletReject,
+  handshakeWalletError,
+  handshakeWalletSuccess } from "@emmpair/actions/wallet";
+import { 
+  fetchPriceTokenWalletReject,
+  fetchPriceTokenWalletError,
+  fetchPriceTokenWalletSuccess } from "@emmpair/actions/wallet";
 
 export function* handshakeWallet() {
   try {
@@ -82,4 +92,24 @@ export function* handshakeWallet() {
   };
 };
 
-
+export function* getPriceTokenWallet() {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const depositContract = new ethers.Contract(APP_DEPOSIT_CONTRACT_ADDRESS,
+                                                depositABI,
+                                                provider)
+    const price = yield call(fetchPriceTokenWallet, depositContract)
+    yield put(fetchPriceTokenWalletSuccess(
+      price.toString(),
+    ))
+  } catch (error) {
+    console.log(error.message)
+    if (error.code == 4001){
+      yield put(fetchPriceTokenWalletReject())      
+    } else if (error.code == -32000 ){
+      yield put(fetchPriceTokenWalletReject())
+    } else {
+      yield put(fetchPriceTokenWalletError())
+    }
+  }
+}

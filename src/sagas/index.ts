@@ -1,6 +1,6 @@
 import { all, takeEvery } from "redux-saga/effects"
-import { HANDSHAKE_WALLET_PENDING } from "@emmpair/actions/wallet"
-import { handshakeWallet } from "./wallet"
+import { HANDSHAKE_WALLET_PENDING, FETCH_PRICE_TOKEN_WALLET_PENDING } from "@emmpair/actions/wallet"
+import { handshakeWallet, getPriceTokenWallet } from "./wallet"
 import { COLLATERAL_PENDING, WITHDRAW_PENDING } from "@emmpair/actions/deposit"
 import { collaterateDeposit, withdrawDeposit } from "./deposit"
 import { MINT_PENDING, BURN_PENDING, APPROVE_BURN_PENDING } from "@emmpair/actions/token"
@@ -17,6 +17,7 @@ import { fetchFarms,
 function* rootSaga() {
   yield all([
     takeEvery(HANDSHAKE_WALLET_PENDING, handshakeWallet),
+    takeEvery(FETCH_PRICE_TOKEN_WALLET_PENDING, getPriceTokenWallet),
     takeEvery(COLLATERAL_PENDING, collaterateDeposit),
     takeEvery(WITHDRAW_PENDING, withdrawDeposit),
     takeEvery(MINT_PENDING, mintToken),

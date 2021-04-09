@@ -1,11 +1,12 @@
-import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import { ethers } from "ethers";
-import { pollWallet } from "@emmpair/hooks/useWallet";
+import React, { useEffect } from 'react'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import Divider from '@material-ui/core/Divider'
+import { ethers } from "ethers"
+import { pollWallet, useFetchPriceTokenWallet } from "@emmpair/hooks/useWallet"
+import { trimElipsis } from "@emmpair/utils"
 // import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,28 +30,65 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function InfoPane() {
-  const classes = useStyles();
-  const { account, network, balance } = pollWallet();
+  const classes = useStyles()
+  const { account, network, balance, priceToken } = pollWallet()
+  const fetchPriceToken = useFetchPriceTokenWallet()
+
+  useEffect(() => {
+    fetchPriceToken()
+    const intervalId = setInterval(() => {
+      fetchPriceToken()
+    }, 30000);
+    return () => clearInterval(intervalId);
+  }, [true])
+
+  // useEffect(() => {
+  //   fetchPriceToken()
+  // }, [true])
 
   return (
-    <List className={classes.root} disablePadding dense >
+    <List 
+      className={classes.root} 
+      disablePadding
+      dense 
+    >
       <ListItem>
-        <ListItemText primary="Address"
-                      secondary={ account || '...'}/>
+        <ListItemText 
+          primary="Address"
+          secondary={ account 
+            || '...'
+          }
+        />
       </ListItem>
-      <Divider component="li" />      
+      <Divider component="li" />
       <ListItem>
-        <ListItemText primary="Network name"
-                      secondary={ network?.name || '...'}/>
+        <ListItemText 
+          primary="Network name"
+          secondary={ network?.name 
+            || '...'
+          }
+        />
       </ListItem>
-      <Divider component="li" />      
+      <Divider component="li" />
       <ListItem>
-        <ListItemText primary="Balance"
-                      secondary={ 
-                        balance && `${ethers.utils.formatEther(balance)} Eth`
-                        || '...' 
-                      }/>
-      </ListItem>      
+        <ListItemText 
+          primary="Balance"
+          secondary={ balance 
+            && `${ethers.utils.formatEther(balance)} Eth`
+            || '...' 
+          }
+        />
+      </ListItem>
+      <Divider component="li" />
+      <ListItem>
+        <ListItemText 
+          primary="dLand Token Price"
+          secondary={ priceToken 
+            && `${trimElipsis(ethers.utils.formatEther(priceToken), 7, "")} Eth`
+            || '...' 
+          }
+        />
+      </ListItem>
     </List>
-  );
+  )
 }

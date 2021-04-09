@@ -2,9 +2,11 @@ import createRootReducer from "./index"
 
 export type TWalletState = {
   hsStatus: string
+  fetchPriceTokenStatus: string  
   account?: string
   network?: any
   balance?: string
+  priceToken?: string
 }
 
 export type TDepositState = {
