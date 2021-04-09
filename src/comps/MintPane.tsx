@@ -165,7 +165,7 @@ export default function MintPane():JSX.Element {
           variant="outlined"
         >
           <InputLabel htmlFor="outlined-adornment-amount">
-            Mint Amount
+            Mint dLand
           </InputLabel>
           <OutlinedInput
             type="numberformat"
@@ -173,7 +173,7 @@ export default function MintPane():JSX.Element {
             onChange={handleChange('mintAmount')}
             endAdornment={
               <InputAdornment position="end">
-                Token
+                dLand
               </InputAdornment>
             }
             labelWidth={70}
@@ -207,7 +207,7 @@ export default function MintPane():JSX.Element {
           variant="outlined"
         >
           <InputLabel htmlFor="outlined-adornment-amount">
-            Burn Amount
+            Burn dLand
           </InputLabel>
           <OutlinedInput
             type="numberformat"
@@ -215,7 +215,7 @@ export default function MintPane():JSX.Element {
             onChange={handleChange('burnAmount')}
             endAdornment={
               <InputAdornment position="end">
-                Token
+                dLand
               </InputAdornment>
             }
             labelWidth={70}
@@ -266,15 +266,15 @@ export default function MintPane():JSX.Element {
 
     <List className={classes.infoPane} disablePadding dense >
       <ListItem>
-        <ListItemText primary="Token Balance"
+        <ListItemText primary="dLand Balance"
                       secondary={ balance 
-                        && `${balance} Token` 
+                        && `${balance}` 
                         || '...'}/>
       </ListItem>
       <ListItem>
-        <ListItemText primary="Allowance burn"
+        <ListItemText primary="Allowance dLand burn"
                       secondary={ allowBurnBalance
-                        && `${allowBurnBalance} Token` 
+                        && `${allowBurnBalance}` 
                         || '...'}/>
       </ListItem>      
     </List>

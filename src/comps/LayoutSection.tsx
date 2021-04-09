@@ -1,11 +1,14 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-// import { makeStyles, Theme } from "@material-ui/core/styles";
-// import useTheme from "@emmpair/hooks/useTheme";
-import ConnectButton from "@emmpair/comps/ConnectButton";
-import ThemeSwitch from "@emmpair/comps/ThemeSwitch";
-import ToolBar from "@emmpair/comps/ToolBar";
-import InfoPane from "@emmpair/comps/InfoPane";
+import React from "react"
+import { makeStyles } from "@material-ui/core/styles"
+// import { makeStyles, Theme } from "@material-ui/core/styles"
+// import useTheme from "@emmpair/hooks/useTheme"
+import ConnectButton from "@emmpair/comps/ConnectButton"
+import ThemeSwitch from "@emmpair/comps/ThemeSwitch"
+import ToolBar from "@emmpair/comps/ToolBar"
+import InfoPane from "@emmpair/comps/InfoPane"
+// import SVG from "react-inlinesvg"
+// import Properlylogo from "@assets/images/properly-logo.svg"
+
 
 interface ILayoutSection {
   children: React.ReactNode;
@@ -36,6 +39,16 @@ const useStyles = makeStyles(theme => ({
       color: theme.palette['textHighlighted']['active']
     }
   },
+  // logoSVG:{
+  //   display: "table-cell",
+  //   verticalAlign: "middle",
+  //   height: "50%",    
+  // },
+  // logoSVGWrap:{
+  //   height: "48px",
+  //   display: "table",
+  //   textAlign: "left",
+  // },
   body: {
     flex: 1,
     display: "flex",
@@ -62,6 +75,11 @@ const LayoutSection: React.FC<ILayoutSection> = ({ children }) => {
         <div className={classes.logo}>
           <b>Pro<span>perl</span>y</b><span>Fin</span>anc<span>E</span>
         </div>
+        {/*
+        <div className={classes.logoSVGWrap}>
+          <SVG className={classes.logoSVG} src={Properlylogo} />      
+        </div>
+        */}
         <ToolBar />
         <ThemeSwitch />
         <ConnectButton />

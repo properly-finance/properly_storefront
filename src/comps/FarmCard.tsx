@@ -7,13 +7,13 @@ import { makeStyles, withStyles, Theme } from '@material-ui/core/styles'
 import { TFarm } from "@emmpair/reducers/types"
 import Warehouses from "@emmpair/icons/Warehouses"
 import OutlinedInput from '@material-ui/core/OutlinedInput'
-import InputAdornment from '@material-ui/core/InputAdornment'
+// import InputAdornment from '@material-ui/core/InputAdornment'
 import NumberFormat from 'react-number-format'
-import { green, deepOrange } from '@material-ui/core/colors';
+import { green, deepOrange } from '@material-ui/core/colors'
 
-import FormControl from '@material-ui/core/FormControl';
+import FormControl from '@material-ui/core/FormControl'
 // import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import FormHelperText from '@material-ui/core/FormHelperText'
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -143,6 +143,7 @@ interface IFarmCard {
   farm: TFarm
   farmKey: number
   disabled: boolean
+
   handleApprove: (
     event: React.MouseEvent<HTMLButtonElement>,
     token: string, farmKey: number,
@@ -170,10 +171,12 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
     handleDeposit,
     handleHarverst,
     handleWithdraw } = props
+
   const [values, setValues] = useState<State>({
     depositAmount: "",
     withdrawAmount: "",
-  })  
+  })
+
   const classes = useStyles()
 
   function handleChange (prop: keyof State){
@@ -199,11 +202,11 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
           <Typography 
             className={classes.sectionDescription}
           >
-            <b>depositFeeBP: </b>{farm.depositFeeBP}
+            <b>Deposit fee: </b>{farm.depositFeeBP}
             <br/>
             <b>Amount: </b>{farm.amount ? farm.amount : "..."}
             <br/>
-            <b>RewardDebt: </b>{farm.rewardDebt ? farm.rewardDebt : "..."}              
+            <b>Rewards: </b>{farm.rewardDebt ? farm.rewardDebt : "..."}              
           </Typography>
           <div className={classes.actionRoot}>
             <GreenColorButton
@@ -266,18 +269,13 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
               )}
               disabled={disabled}
             >
-              Harverst
+              Harvest
             </OrangeColorButton>
             <div className={classes.actionFormControl}>
               <OutlinedInput
                 type="numberformat"
                 value={values.withdrawAmount}
                 onChange={handleChange('withdrawAmount')}
-                endAdornment={
-                  <InputAdornment position="end">
-                    Token
-                  </InputAdornment>
-                }
                 labelWidth={70}
                 inputComponent={NumberFormatToken as any}
                 margin="dense"

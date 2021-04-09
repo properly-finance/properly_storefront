@@ -140,7 +140,7 @@ export default function CollateralPane():JSX.Element {
           variant="outlined"
         >
           <InputLabel htmlFor="outlined-adornment-amount">
-            Deposit Amount
+            Deposit Eth as Collateral
           </InputLabel>
           <OutlinedInput
             type="numberformat"
@@ -182,7 +182,7 @@ export default function CollateralPane():JSX.Element {
           variant="outlined"
         >
           <InputLabel htmlFor="outlined-adornment-amount">
-            Withdraw Amount
+            Withdraw Eth
           </InputLabel>
           <OutlinedInput
             type="numberformat"
