@@ -1,20 +1,21 @@
 import React from "react"
-import { makeStyles } from "@material-ui/core/styles"
-// import { makeStyles, Theme } from "@material-ui/core/styles"
-// import useTheme from "@emmpair/hooks/useTheme"
+import { makeStyles, Theme } from "@material-ui/core/styles"
+import useTheme from "@emmpair/hooks/useTheme"
 import ConnectButton from "@emmpair/comps/ConnectButton"
 import ThemeSwitch from "@emmpair/comps/ThemeSwitch"
 import ToolBar from "@emmpair/comps/ToolBar"
 import InfoPane from "@emmpair/comps/InfoPane"
-import SVG from "react-inlinesvg"
-import Properlylogo from "@assets/images/properly-logo.svg"
+// import SVG from "react-inlinesvg"
+// import Properlylogo from "@assets/images/properly-logo.svg"
+import ProperlylogoLight from "@assets/images/properly-logo-light-color-small.png"
+import ProperlylogoDark from "@assets/images/properly-logo-dark-color-small.png"
 
 
 interface ILayoutSection {
   children: React.ReactNode;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: 'flex',    
     // flexDirection: "column",
@@ -27,10 +28,12 @@ const useStyles = makeStyles(theme => ({
   },
   /* 1.1 */  
   logoWrap:{
-    // pass
+    paddingLeft: theme.spacing(2),
   },  
   logo:{
     // pass
+    height: "75px",
+    width: "150px",
   },  
 
   /* 2 */
@@ -57,7 +60,8 @@ const useStyles = makeStyles(theme => ({
 
 
 const LayoutSection: React.FC<ILayoutSection> = ({ children }) => {
-  const classes = useStyles({});
+  const classes = useStyles()
+  const { isDark } = useTheme()  
   return (
     <div className={classes.root}>
 
@@ -65,7 +69,14 @@ const LayoutSection: React.FC<ILayoutSection> = ({ children }) => {
       <div className={classes.sidebar}>
         {/* 1.1 */}
         <div className={classes.logoWrap}>
-          <SVG className={classes.logo} src={Properlylogo}/>
+          <img 
+            className={classes.logo} 
+            src={isDark
+              ? ProperlylogoDark
+              : ProperlylogoLight
+            } 
+            alt='Properly'
+          />  
         </div>
         {/* 1.2 */}
         <InfoPane/>

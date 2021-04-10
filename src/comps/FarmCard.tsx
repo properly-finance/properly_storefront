@@ -197,7 +197,7 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
             className={classes.sectionTitle}
             color="primary"
           >
-            {farm.name}
+            {farm.name} Farm
           </Typography>
           <Typography 
             className={classes.sectionDescription}

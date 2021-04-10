@@ -44,8 +44,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }),{ name: "ThemeSwitch"})
 
 const ThemeSwitch: React.FC = () => {
-  const classes = useStyles({});
-  const { isDark, toggleTheme } = useTheme();
+  const classes = useStyles()
+  const { isDark, toggleTheme } = useTheme()
 
   return (
     <>

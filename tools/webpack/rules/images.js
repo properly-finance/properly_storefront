@@ -28,7 +28,7 @@ export default {
         loader: 'file-loader',
         options: {
             name: '[1]',
-            regExp: /src\/(.+)/,
+            regExp: /assets\/(.+)/,
             // name (fullname){
             //     return /src\/(.+)/.exec(fullname)[1]
             // }

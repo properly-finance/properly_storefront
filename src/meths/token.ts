@@ -1,5 +1,5 @@
 export function fetchTokenName(tokenContract){
-  return tokenContract.name()
+  return tokenContract.symbol()
 }
 
 export function fetchTokenBalance(
