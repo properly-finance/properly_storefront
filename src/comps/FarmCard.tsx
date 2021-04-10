@@ -202,9 +202,11 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
           <Typography 
             className={classes.sectionDescription}
           >
-            <b>Deposit fee: </b>{farm.depositFeeBP}
+            <b>Deposit fee: </b>{farm.depositFeeBP > 0
+              ? farm.depositFeeBP / 100
+              : 0 } %
             <br/>
-            <b>Amount: </b>{farm.amount ? farm.amount : "..."}
+            <b>Amount Deposited: </b>{farm.amount ? farm.amount : "..."}
             <br/>
             <b>Rewards: </b>{farm.rewardDebt ? farm.rewardDebt : "..."}              
           </Typography>

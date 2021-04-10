@@ -1,12 +1,36 @@
-export function fetchTokenName(tokenContract){
-  return tokenContract.symbol()
+
+// export async function fetchTokenPairAddr(contract){
+//   const addr0 = await contract.token0()
+//   const addr1 = await contract.token1()
+//   return [addr0, addr1]
+// }
+
+export function fetchTokenPairAddr(contract){
+  return Promise.all([
+    contract.token0(),
+    contract.token1()
+  ])
+}
+
+// export async function fetchTokenCompName(contract0, contract1){
+//   const symbol0 = await contract0.symbol()
+//   const symbol1 = await contract1.symbol()
+//   return `${symbol0}/${symbol1}`
+// }
+
+export async function fetchTokenCompName(contract0, contract1){
+  const [symbol0, symbol1] = await Promise.all([
+    contract0.symbol(),
+    contract1.symbol()
+  ])
+  return `${symbol0}/${symbol1}`
 }
 
 export function fetchTokenBalance(
-  tokenContract,
+  contract,
   account: string
 ){
-  return tokenContract.balanceOf(account)
+  return contract.balanceOf(account)
 };
 
 export function fetchTokenAllowance(
@@ -18,10 +42,10 @@ export function fetchTokenAllowance(
 };
 
 export async function txMint(
-  depositContract,
+  contract,
   amount: string
 ) {
-  const tx = await depositContract.MintAsset(amount)
+  const tx = await contract.MintAsset(amount)
   const txInfo = await tx.wait()
   return [tx, txInfo]
 }
@@ -37,10 +61,10 @@ export async function txIncreaseTokenAllowance(
 }
 
 export async function txBurn(
-  depositContract,
+  contract,
   amount: string
 ) {
-  const tx = await depositContract.BurnAsset(amount)
+  const tx = await contract.BurnAsset(amount)
   const txInfo = await tx.wait()
   return [tx, txInfo]
 }

@@ -3,12 +3,12 @@
     "inputs": [
       {
         "internalType": "contract SyntheticToken",
-        "name": "_token",
+        "name": "_dlandindextoken",
         "type": "address"
       },
       {
-        "internalType": "contract LandOracleProxy",
-        "name": "_price",
+        "internalType": "contract ProperlyToken",
+        "name": "_protocolToken",
         "type": "address"
       },
       {
@@ -19,6 +19,16 @@
       {
         "internalType": "address",
         "name": "_oracleaddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_compeaddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_uniswap",
         "type": "address"
       }
     ],
@@ -42,6 +52,25 @@
       }
     ],
     "name": "EthUncollaterased",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
     "type": "event"
   },
   {
@@ -108,52 +137,14 @@
         "type": "uint256"
       }
     ],
-    "name": "BurnAsset",
+    "name": "burnAsset",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "CollateralBalance",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "CollateralUsedEth",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
-    "name": "CollateralizeEth",
+    "name": "buyBackAndBurn",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -166,7 +157,7 @@
         "type": "address"
       }
     ],
-    "name": "CurrentBorrowLimitEth",
+    "name": "cETH",
     "outputs": [
       {
         "internalType": "uint256",
@@ -179,7 +170,7 @@
   },
   {
     "inputs": [],
-    "name": "LandIndexPrice",
+    "name": "cETHCurrentBalance",
     "outputs": [
       {
         "internalType": "uint256",
@@ -194,11 +185,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_called",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "LandPrice",
+    "name": "collateralBalance",
     "outputs": [
       {
         "internalType": "uint256",
@@ -207,32 +198,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "MintAsset",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "WithdrawCollateral",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -249,16 +214,100 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "landPerEthPriceIndex",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "collateralUsedEth",
     "outputs": [
       {
-        "internalType": "contract LandOracleProxy",
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collateralizeEth",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "compAddress",
+    "outputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "currentBorrowLimitEth",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dLandIndexToken",
+    "outputs": [
+      {
+        "internalType": "contract SyntheticToken",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "landIndexPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "mintAsset",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -276,15 +325,91 @@
   },
   {
     "inputs": [],
-    "name": "token",
+    "name": "owner",
     "outputs": [
       {
-        "internalType": "contract SyntheticToken",
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
     "stateMutability": "view",
     "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "protocolToken",
+    "outputs": [
+      {
+        "internalType": "contract ProperlyToken",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tokenBurnBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "updateOracleAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawCollateral",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   }
 ]

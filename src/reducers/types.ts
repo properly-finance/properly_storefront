@@ -35,7 +35,7 @@ export type TFarm = {
   // ..
   lpToken: string
   depositFeeBP: number
-  accPROPPerShare: string
+  accDPIPerShare: string
   allocPoint: string
   lastRewardBlock: string
 }

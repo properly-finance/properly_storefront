@@ -3,6 +3,8 @@ import { ethers } from "ethers"
 import { APP_FARM_CONTRACT_ADDRESS } from "@emmpair/config"
 import farmABI from "@abis/farm.json"
 import tokenABI from "@abis/token.json"
+import uniswapPairTokenABI from "@abis/uniswapPair.json"
+import ierc20TokenABI from "@abis/ierc20.json"
 import { 
   fetchFarmsCount,
   fetchFarmInfo,
@@ -10,7 +12,8 @@ import {
   txDepositFarm,
   txWithdrawFarm } from "@emmpair/meths/farm"
 import { 
-  fetchTokenName,
+  fetchTokenPairAddr,
+  fetchTokenCompName,
   fetchTokenBalance,
   fetchTokenAllowance,
   txIncreaseTokenAllowance } from "@emmpair/meths/token"
@@ -60,14 +63,27 @@ export function* fetchFarms(action: FetchFarmsPending) {
     const farms = qbatch.length > 0
                 ? yield all(qbatch)  
                 : []
-    const tookens_contracts = farms.map((farm) => (
-      new ethers.Contract(farm.lpToken, tokenABI, provider)
+    const uni_tookens_contracts = farms.map((farm) => (
+      new ethers.Contract(farm.lpToken, uniswapPairTokenABI, provider)
     ))
 
-    // TokenName
+    // TokenPairs
     // ...
-    const qbatch_names = tookens_contracts.map((contract) => (
-      call(fetchTokenName, contract)
+    const qbatch_pairs_addr = uni_tookens_contracts.map((contract) => (
+      call(fetchTokenPairAddr, contract)
+    ))
+    const farms_token_pairs_addr = qbatch_pairs_addr.length > 0
+      ? yield all(qbatch_pairs_addr)
+      : []
+
+    // TokenNames
+    // ...
+    const qbatch_names = farms_token_pairs_addr.map((addrs) => (
+      call(
+        fetchTokenCompName, 
+        new ethers.Contract(addrs[0], ierc20TokenABI, provider),
+        new ethers.Contract(addrs[1], ierc20TokenABI, provider),
+      )
     ))
     const farms_token_names = qbatch_names.length > 0
       ? yield all(qbatch_names)
@@ -76,7 +92,7 @@ export function* fetchFarms(action: FetchFarmsPending) {
     // TokenAllowance
     // ..
     const farms_allowance_batch = account 
-      ? tookens_contracts.map((contract) => (
+      ? uni_tookens_contracts.map((contract) => (
           call(fetchTokenAllowance, 
                contract, account, APP_FARM_CONTRACT_ADDRESS)))
       : []
@@ -87,7 +103,7 @@ export function* fetchFarms(action: FetchFarmsPending) {
     // TokenTokenBalance
     // ..
     const farms_token_balance_batch = account 
-      ? tookens_contracts.map((contract) => (
+      ? uni_tookens_contracts.map((contract) => (
           call(fetchTokenBalance, 
                contract, account)))
       : []
@@ -116,7 +132,7 @@ export function* fetchFarms(action: FetchFarmsPending) {
       // ..
       lpToken: farm.lpToken,
       depositFeeBP: farm.depositFeeBP,
-      accPROPPerShare: farm.accPROPPerShare.toString(),
+      accDPIPerShare: farm.accDPIPerShare.toString(),
       allocPoint: farm.allocPoint.toString(),
       lastRewardBlock: farm.lastRewardBlock.toString(),
     }))

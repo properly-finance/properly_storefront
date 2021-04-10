@@ -15,5 +15,5 @@ export function fetchBalance(provider, account){
 }
 
 export function fetchPriceTokenWallet(depositContract){
-    return depositContract.LandIndexPrice()
+    return depositContract.landIndexPrice()
 }

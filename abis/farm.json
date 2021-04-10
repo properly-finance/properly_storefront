@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "contract ProperlyToken",
-        "name": "_PROP",
+        "name": "_dpi",
         "type": "address"
       },
       {
@@ -18,7 +18,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_PROPPerBlock",
+        "name": "_dpiPerBlock",
         "type": "uint256"
       },
       {
@@ -125,45 +125,6 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "BONUS_MULTIPLIER",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "PROP",
-    "outputs": [
-      {
-        "internalType": "contract ProperlyToken",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "PROPPerBlock",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -236,6 +197,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "dpi",
+    "outputs": [
+      {
+        "internalType": "contract ProperlyToken",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dpiPerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -256,30 +243,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_from",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_to",
-        "type": "uint256"
-      }
-    ],
-    "name": "getMultiplier",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -318,7 +281,7 @@
         "type": "address"
       }
     ],
-    "name": "pendingPROP",
+    "name": "pendingDPI",
     "outputs": [
       {
         "internalType": "uint256",
@@ -375,7 +338,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "accPROPPerShare",
+        "name": "accDPIPerShare",
         "type": "uint256"
       },
       {
@@ -463,7 +426,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_PROPPerBlock",
+        "name": "_DPIPerBlock",
         "type": "uint256"
       }
     ],
