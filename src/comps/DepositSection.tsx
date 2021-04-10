@@ -1,34 +1,17 @@
 import React from "react"
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { Route, Switch } from "react-router-dom"
 import WindowTitle from "@emmpair/comps/WindowTitle"
-import CollateralPane from "@emmpair/comps/CollateralPane"
-import MintPane from "@emmpair/comps/MintPane"
-import Divider from '@material-ui/core/Divider'
+import DepositPage from  "@emmpair/comps/DepositPage"
 
-
-const useStyles = makeStyles((theme: Theme) => ({
-  sectionWrap: {
-    display: "flex",
-    alignItems: "flex-start",
-  },
-  divider: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),    
-  },
-}),{ name: "DepositSection" });
-
-export default function DepositSection():JSX.Element {
-  const classes = useStyles();    
+const DepositSection: React.FC = () => {  
   return (
     <>
-    <WindowTitle title={'Collateral & Mint | Properly'} />    
-    <div className={classes.sectionWrap}>
-      <CollateralPane />
-    </div>
-    <Divider variant="middle" className={classes.divider} />
-    <div className={classes.sectionWrap}>
-      <MintPane />
-    </div>
+    <WindowTitle title={'Collateral & Mint | Properly'} />
+    <Switch>
+      <Route exact path="/" component={DepositPage} />
+    </Switch>      
     </>
   )
 }
+
+export default DepositSection
