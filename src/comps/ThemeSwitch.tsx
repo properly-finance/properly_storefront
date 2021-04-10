@@ -1,6 +1,6 @@
 import React from "react";
 import Switch from "@material-ui/core/Switch";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import useTheme from "@emmpair/hooks/useTheme";
 import MoonIcon from "@emmpair/icons/Moon";
 import SunIcon from "@emmpair/icons/Sun";
@@ -19,34 +19,29 @@ import SunIcon from "@emmpair/icons/Sun";
 //   }
 // );
 
-const useStyles = makeStyles(
-  theme => ({
-    checked: {
-      "& svg": {
-        background: theme.palette.primary.main,
-        color: theme.palette.background.paper
-      }
-    },
-    colorPrimary: {},
-    root: {
-      "& svg": {
-        background: theme.palette.primary.main,
-        borderRadius: "100%",
-        height: 20,
-        width: 20
-      }
-    },
-    track: {
-      "$colorPrimary$checked + &": {
-        backgroundColor: theme.palette.background.paper
-      },
-      background: theme.palette.background.paper
+const useStyles = makeStyles((theme: Theme) => ({
+  checked: {
+    "& svg": {
+      background: theme.palette.primary.main,
+      color: theme.palette.background.paper
     }
-  }),
-  {
-    name: "ThemeSwitch"
+  },
+  colorPrimary: {},
+  root: {
+    "& svg": {
+      background: theme.palette.primary.main,
+      borderRadius: "100%",
+      height: 20,
+      width: 20
+    }
+  },
+  track: {
+    "$colorPrimary$checked + &": {
+      backgroundColor: theme.palette.background.paper
+    },
+    background: theme.palette.background.paper
   }
-);
+}),{ name: "ThemeSwitch"})
 
 const ThemeSwitch: React.FC = () => {
   const classes = useStyles({});

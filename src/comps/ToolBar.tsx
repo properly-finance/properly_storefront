@@ -8,7 +8,7 @@ import { pollRouter } from "@emmpair/hooks/useNavigator"
 
 const useStyles = makeStyles({
   root: {
-    flexGrow: 1,
+    flex: 1,
   },
 },{ name: "ToolBar" })
 

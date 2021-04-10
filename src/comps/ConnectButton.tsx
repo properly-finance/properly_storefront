@@ -5,13 +5,15 @@ import Chip from "@material-ui/core/Chip"
 import { pollWallet, useHandshakeWallet} from "@emmpair/hooks/useWallet"
 
 const useStyles = makeStyles((theme: Theme) => ({
-  wrap: {
+  root: {
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     display: 'flex',
     alignItems: "center",
+    width: "150px",
   },
   chip: {
+    flex: 1,
     [theme.breakpoints.down("sm")]: {
       height: 48
     },
@@ -50,7 +52,7 @@ const ConnectButton: React.FC = () => {
   }, [isOK])
 
   return (
-    <div className={classes.wrap} >
+    <div className={classes.root} >
       <Chip
         className={ classes.chip }
         onClick={ handshakeHandle }        
@@ -74,7 +76,6 @@ const ConnectButton: React.FC = () => {
                         : false
                       : true 
                     : true }
-        data-test="connectMenu"
       />
     </div>
   )

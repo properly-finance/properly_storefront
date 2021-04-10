@@ -6,8 +6,8 @@ import ConnectButton from "@emmpair/comps/ConnectButton"
 import ThemeSwitch from "@emmpair/comps/ThemeSwitch"
 import ToolBar from "@emmpair/comps/ToolBar"
 import InfoPane from "@emmpair/comps/InfoPane"
-// import SVG from "react-inlinesvg"
-// import Properlylogo from "@assets/images/properly-logo.svg"
+import SVG from "react-inlinesvg"
+import Properlylogo from "@assets/images/properly-logo.svg"
 
 
 interface ILayoutSection {
@@ -15,11 +15,31 @@ interface ILayoutSection {
 }
 
 const useStyles = makeStyles(theme => ({
-  content: {
+  root: {
     display: 'flex',    
-    flexDirection: "column",
+    // flexDirection: "column",
     minHeight: `calc(100vh - ${theme.spacing(2) - 16 }px)`
   },
+
+  /* 1 */
+  sidebar: {
+    // pass
+  },
+  /* 1.1 */  
+  logoWrap:{
+    // pass
+  },  
+  logo:{
+    // pass
+  },  
+
+  /* 2 */
+  body: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",    
+  },
+  /* 2.1 */
   header: {
     display: "flex",
     gridTemplateAreas: `"headerAnchor headerToolbar"`,
@@ -28,39 +48,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
-  logo: {
-    display: 'flex',
-    alignItems: "center",
-    fontWeight: "bold",
-    fontSize: "16pt",
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),      
-    "& span": {
-      color: theme.palette['textHighlighted']['active']
-    }
-  },
-  // logoSVG:{
-  //   display: "table-cell",
-  //   verticalAlign: "middle",
-  //   height: "50%",    
-  // },
-  // logoSVGWrap:{
-  //   height: "48px",
-  //   display: "table",
-  //   textAlign: "left",
-  // },
-  body: {
-    flex: 1,
-    display: "flex",
-    alignItems: "stretch",
-    // border: "2px solid black",
-  },
-  infoPane: {
-    // width: "50%",
-    // border: "2px solid red",
-  },
-  actionPane:{
-    flexGrow: 1,
+  /* 2.2 */
+  content:{
     marginLeft: theme.spacing(3),
     // border: "2px solid green",
   },
@@ -70,28 +59,32 @@ const useStyles = makeStyles(theme => ({
 const LayoutSection: React.FC<ILayoutSection> = ({ children }) => {
   const classes = useStyles({});
   return (
-    <div className={classes.content}>
-      <div className={classes.header}>
-        <div className={classes.logo}>
-          <b>Pro<span>perl</span>y</b><span>Fin</span>anc<span>E</span>
+    <div className={classes.root}>
+
+      {/* 1 */}
+      <div className={classes.sidebar}>
+        {/* 1.1 */}
+        <div className={classes.logoWrap}>
+          <SVG className={classes.logo} src={Properlylogo}/>
         </div>
-        {/*
-        <div className={classes.logoSVGWrap}>
-          <SVG className={classes.logoSVG} src={Properlylogo} />      
-        </div>
-        */}
-        <ToolBar />
-        <ThemeSwitch />
-        <ConnectButton />
+        {/* 1.2 */}
+        <InfoPane/>
       </div>
+
+      {/* 2 */}
       <div className={classes.body}>
-        <div className={classes.infoPane}>
-          <InfoPane/>
+        {/* 2.1 */}      
+        <div className={classes.header}>
+          <ToolBar />
+          <ThemeSwitch />
+          <ConnectButton />
         </div>
-        <div className={classes.actionPane}>
-          { children }        
-        </div>        
+        {/* 2.2 */}        
+        <div className={classes.content}>
+          { children }
+        </div>
       </div>
+
     </div>    
   )    
 }

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       gridTemplateColumns: "1fr"
     },
     display: "grid",
-    gridColumnGap: theme.spacing(4),
+    gridColumnGap: theme.spacing(3),
     gridTemplateColumns: "1fr 1fr"
   },
 }),{ name: "FarmList" })
