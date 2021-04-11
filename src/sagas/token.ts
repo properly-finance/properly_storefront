@@ -1,4 +1,5 @@
 import { call, put } from 'redux-saga/effects'
+import { ethers } from "ethers"
 import { APP_DEPOSIT_CONTRACT_ADDRESS } from "@emmpair/config"
 import { updateDepositInfoRequest } from "@emmpair/actions/deposit"
 import { MintPendingAction, BurnPendingAction, ApproveBurnPendingAction,
@@ -7,9 +8,12 @@ import { MintPendingAction, BurnPendingAction, ApproveBurnPendingAction,
          mintError, burnError, approveBurnError } from "@emmpair/actions/token"
 import { fetchCollateralBalance,
          fetchCollateralUsed,
-         fetchBorrowLimit } from "@emmpair/meths/deposit"
-import { fetchTokenBalance, fetchTokenAllowance,
-         txMint, txBurn, txIncreaseTokenAllowance } from "@emmpair/meths/token"
+         fetchBorrowLimit,
+         txMint,
+         txBurn } from "@emmpair/meths/deposit"
+import { fetchTokenBalance,
+         fetchTokenAllowance,
+         txIncreaseTokenAllowance } from "@emmpair/meths/token"
 
 // function callStub(text){
 //   return new Promise<string>(resolve => {
@@ -24,9 +28,9 @@ export function* mintToken(action: MintPendingAction) {
   try {
     const signer = window.ethers?.getSigner()
     const depositContractWithSigner = window.depositContract.connect(signer)    
-    // const bnAmount = ethers.utils.parseEther(amount || "0")
+    const bigAmount = ethers.utils.parseEther(amount || "0")
         
-    yield call(txMint, depositContractWithSigner, amount)
+    yield call(txMint, depositContractWithSigner, bigAmount)
 
     const balance = yield call(fetchTokenBalance, 
                                window.tokenContract,
@@ -65,8 +69,9 @@ export function* burnToken(action: BurnPendingAction) {
   try {
     const signer = window.ethers?.getSigner()
     const depositContractWithSigner = window.depositContract.connect(signer)    
-        
-    yield call(txBurn, depositContractWithSigner, amount)
+    const bigAmount = ethers.utils.parseEther(amount || "0")
+            
+    yield call(txBurn, depositContractWithSigner, bigAmount)
 
     const balance = yield call(fetchTokenBalance, 
                                window.tokenContract,

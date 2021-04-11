@@ -12,6 +12,8 @@ import OutlinedInput from '@material-ui/core/OutlinedInput'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Divider from '@material-ui/core/Divider'
 import { deepOrange, green } from '@material-ui/core/colors'
+import { trimElipsis } from "@emmpair/utils"
+
 
 import { 
   pollDeposit,
@@ -174,7 +176,7 @@ const DepositPage: React.FC = () => {
 
   function handleApproveBurn(event: React.MouseEvent<HTMLButtonElement>){
     event.preventDefault()
-    approveBurnAsset(account, values.burnAmount)
+    approveBurnAsset(account, "99999999999999999999999")
   }
 
   function handleBurn(event: React.MouseEvent<HTMLButtonElement>){
@@ -427,7 +429,7 @@ const DepositPage: React.FC = () => {
             <ListItemText 
               primary="dLand Balance"
               secondary={ balance 
-                && `${balance}` 
+                && `${trimElipsis(ethers.utils.formatEther(balance))}` 
                 || '...'
               }/>
           </ListItem>
@@ -435,7 +437,7 @@ const DepositPage: React.FC = () => {
             <ListItemText 
               primary="Allowance dLand burn"
               secondary={ allowBurnBalance
-                && `${allowBurnBalance}` 
+                && `${trimElipsis(ethers.utils.formatEther(allowBurnBalance))}` 
                 || '...'}/>
           </ListItem>      
         </List>

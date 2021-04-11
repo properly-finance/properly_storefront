@@ -41,30 +41,12 @@ export function fetchTokenAllowance(
   return tokenContract.allowance(accountAddr, spenderContractAddr)
 };
 
-export async function txMint(
-  contract,
-  amount: string
-) {
-  const tx = await contract.MintAsset(amount)
-  const txInfo = await tx.wait()
-  return [tx, txInfo]
-}
-
 export async function txIncreaseTokenAllowance(
   tokenContract,
   spenderContractAddr: string,
   amount: string
 ) {
   const tx = await tokenContract.increaseAllowance(spenderContractAddr, amount)
-  const txInfo = await tx.wait()
-  return [tx, txInfo]
-}
-
-export async function txBurn(
-  contract,
-  amount: string
-) {
-  const tx = await contract.BurnAsset(amount)
   const txInfo = await tx.wait()
   return [tx, txInfo]
 }
