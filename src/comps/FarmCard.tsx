@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { ethers } from "ethers"
 import Card from "@material-ui/core/Card"
 import CardContent from "@material-ui/core/CardContent"
 import Typography from "@material-ui/core/Typography"
@@ -206,9 +207,9 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
               ? farm.depositFeeBP / 100
               : 0 } %
             <br/>
-            <b>Amount Deposited: </b>{farm.amount ? farm.amount : "..."}
+            <b>Amount Deposited: </b>{farm.amount ? ethers.utils.formatEther(farm.amount) : "..."}
             <br/>
-            <b>Rewards: </b>{farm.rewardDebt ? farm.rewardDebt : "..."}              
+            <b>Rewards: </b>{farm.rewardDebt ? ethers.utils.formatEther(farm.rewardDebt) : "..."}              
           </Typography>
           <div className={classes.actionRoot}>
             <GreenColorButton
@@ -237,7 +238,7 @@ const FarmCard: React.FC<IFarmCard> = (props) => {
                 <FormHelperText>
                   <b>
                     {farm.tokenBalance 
-                      ? `Token Balance: ${farm.tokenBalance}` 
+                      ? `Token Balance: ${ethers.utils.formatEther(farm.tokenBalance)}` 
                       : "..."}
                   </b>
                 </FormHelperText>                

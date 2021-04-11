@@ -6,8 +6,20 @@ export function fetchFarmInfo(contract, n: number){
   return contract.poolInfo(n)
 }
 
-export function fetchFarmUserInfo(contract, n: number, accountAddr:string) {
-  return contract.userInfo(n, accountAddr)
+export function fetchFarmUserInfo(
+  contract,
+  pid: number,
+  accountAddr:string
+) {
+  return contract.userInfo(pid, accountAddr)
+}
+
+export function fetchFarmPendingDPI(
+  contract,
+  pid: number,
+  accountAddr:string
+) {
+  return contract.pendingDPI(pid, accountAddr)
 }
 
 export async function txDepositFarm(

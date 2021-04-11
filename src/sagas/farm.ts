@@ -9,6 +9,7 @@ import {
   fetchFarmsCount,
   fetchFarmInfo,
   fetchFarmUserInfo,
+  fetchFarmPendingDPI,
   txDepositFarm,
   txWithdrawFarm } from "@emmpair/meths/farm"
 import { 
@@ -121,6 +122,16 @@ export function* fetchFarms(action: FetchFarmsPending) {
       ? yield all(farms_userInfos_batch)
       : []
 
+    // pendingDPI
+    const farms_pendingDPI_batch = account 
+      ? farms.map((_farm, key) => (
+          call(fetchFarmPendingDPI, 
+               farmContract, fix2Offset + key, account)))
+      : []
+    const farms_pendingDPI = farms_pendingDPI_batch.length > 0
+      ? yield all(farms_pendingDPI_batch)
+      : []      
+
     const farmsMap = farms.map((farm, key) => ({
       pid: fix2Offset + key,
       name: farms_token_names[key],
@@ -128,7 +139,8 @@ export function* fetchFarms(action: FetchFarmsPending) {
       tokenBalance: farms_token_balance.length > 0 ? farms_token_balance[key].toString() : 0,
       allowance: farms_allowance.length > 0 ? farms_allowance[key].toString() : 0,
       amount: farms_userInfos.length > 0 ? farms_userInfos[key].amount.toString() : 0,
-      rewardDebt: farms_userInfos.length > 0 ? farms_userInfos[key].rewardDebt.toString() : 0,
+      // rewardDebt: farms_userInfos.length > 0 ? farms_userInfos[key].rewardDebt.toString() : 0,
+      rewardDebt: farms_pendingDPI.length > 0 ? farms_pendingDPI[key].toString() : 0,
       // ..
       lpToken: farm.lpToken,
       depositFeeBP: farm.depositFeeBP,
