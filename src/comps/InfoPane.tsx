@@ -7,6 +7,8 @@ import Divider from '@material-ui/core/Divider'
 import { ethers } from "ethers"
 import { pollWallet, useFetchPriceTokenWallet } from "@emmpair/hooks/useWallet"
 import { trimElipsis } from "@emmpair/utils"
+import { caclPrice } from "@emmpair/utils"
+
 // import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -84,7 +86,7 @@ export default function InfoPane() {
         <ListItemText 
           primary="dLand Token Price"
           secondary={ priceToken 
-            && `${trimElipsis(ethers.utils.formatEther(priceToken), 7, "")} Eth`
+            && `${trimElipsis(caclPrice(ethers.utils.formatEther(priceToken)), 7, "")} Eth`
             || '...' 
           }
         />

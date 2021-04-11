@@ -9,3 +9,9 @@ export function trimElipsis(
           : str
       : elipsSymbol
 }
+
+export function caclPrice(
+  price: string,
+): string {
+  return `${1 / Number(price)}`
+}
